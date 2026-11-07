@@ -1,0 +1,71 @@
+﻿@model List<Sefa_Subasi_Portfolio.DAL.Entities.Project>
+
+<section id="projects">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3 reveal-on-scroll">
+            <div>
+                <div class="eyebrow-badge">
+                    <i class="bi bi-folder-check"></i> SEÇİLMİŞ ÇALIŞMALAR
+                </div>
+                <h2 class="section-title mb-1">
+                    Fikirden Ürüne Dönüşen Projeler
+                </h2>
+                <p class="section-description mb-0">
+                    Öğrenme, üretme ve problem çözme süreçlerimin birer yansıması olan projelerimden bazıları.
+                </p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="d-flex flex-wrap gap-2" id="projectFilters">
+                <button class="filter-btn active" data-filter="Tümü">Tümü</button>
+                <button class="filter-btn" data-filter="Web">Web</button>
+                <button class="filter-btn" data-filter="Yapay Zeka">Yapay Zeka</button>
+                <button class="filter-btn" data-filter="Mobil">Mobil</button>
+                <button class="filter-btn" data-filter="Mikroservisler">Mikroservisler</button>
+            </div>
+        </div>
+
+        <!-- Project Grid -->
+        <div class="row g-4" id="projectGrid">
+
+            @foreach(var item in Model)
+            {
+            <div class="col-lg-6 project-item reveal-on-scroll" data-category="Tümü & @item.ProjectCategory">
+                <div class="project-card">
+                    <div class="project-thumb-wrap">
+                        <img src="https://monday.com/blog/wp-content/uploads/2020/12/what-is-a-project-s3_2026-05-24T08-52-54.png" class="project-thumb-img">
+                        <span class="project-category-tag">@item.ProjectCategory</span>
+                    </div>
+                    <div class="project-body">
+                        <h3 class="h4 fw-bold mb-2">@item.Head</h3>
+                        <p class="text-muted small mb-4 flex-grow-1">
+                        @item.Detail
+                        </p>
+                        <div class="mb-4">
+                            @foreach(var techno in item.ProjectTechnologies)
+                                {
+                                    <span class="tech-badge">@techno.ProjectTechnologyName</span>
+                                }
+                            </div>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                            <a href="@item.WebSite" class="btn-sage btn-sm">
+                                <span>Projeyi İncele</span>
+                                <i class="bi bi-arrow-up-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            }
+
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="#contact" class="btn-secondary-custom px-4 py-3">
+                <span>Tüm Projelerimi Gör</span>
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>

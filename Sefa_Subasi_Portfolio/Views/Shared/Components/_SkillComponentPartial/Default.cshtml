@@ -1,0 +1,41 @@
+﻿@model List<Sefa_Subasi_Portfolio.DAL.Entities.Skill>
+
+<section id="skills">
+    <div class="container">
+        <div class="section-header text-center mx-auto reveal-on-scroll" style="max-width: 680px;">
+            <div class="eyebrow-badge">
+                <i class="bi bi-stack"></i> TEKNOLOJİ YIĞINIM
+            </div>
+            <h2 class="section-title">
+                Kullandığım Teknolojiler ve Uzmanlık Alanlarım
+            </h2>
+            <p class="section-description mx-auto">
+                Bir fikrin hayata geçirilmesinden ölçeklenebilir bir yazılım ürününe dönüşmesine kadar farklı teknolojilerle çalışıyorum.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                <!-- Category Card -->
+                <div class="col-md-6 col-lg-4 reveal-on-scroll">
+                    <div class="skill-card">
+                        <div class="skill-icon-box">
+                            <!-- Dinamik İkon (Örn: bi bi-server) -->
+                            <i class="@item.Icon"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-3">@item.Title</h3>
+                        <p class="text-muted small mb-4">@item.Description</p>
+                        <div class="d-flex flex-wrap">
+                            @foreach (var subItem in item.SkillItems)
+                            {
+                                <span class="tech-badge">@subItem.Name</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+</section>

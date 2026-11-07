@@ -1,0 +1,45 @@
+﻿@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    @await Component.InvokeAsync("_HeadComponentPartial")
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    @await Component.InvokeAsync("_NavbarComponentPartial")
+
+    <main>
+        <!-- 4. Main Section -->
+        @await Component.InvokeAsync("_FeatureComponentPartial")
+
+        <!-- 5. About Section -->
+        @await Component.InvokeAsync("_AboutComponentPartial")
+
+        <!-- 6. Skills Section -->
+        @await Component.InvokeAsync("_SkillComponentPartial")
+
+        <!-- 7. Professional Experience Section -->
+        @await Component.InvokeAsync("_ExperienceComponentPartial")
+
+        <!-- 8. Featured Projects Section -->
+        @await Component.InvokeAsync("_ProjectComponentPartial")
+        <!-- 9. Education Section -->
+        @await Component.InvokeAsync("_EducationComponentPartial")
+
+        <!-- 11. Contact Section -->
+        @await Component.InvokeAsync("_ContactComponentPartial")
+
+    </main>
+
+    <!-- 12. Footer -->
+    @await Component.InvokeAsync("_FooterComponentPartial")
+
+    <!-- 13. Scripts -->
+    @await Component.InvokeAsync("_ScriptComponentPartial")
+</body>
+</html>

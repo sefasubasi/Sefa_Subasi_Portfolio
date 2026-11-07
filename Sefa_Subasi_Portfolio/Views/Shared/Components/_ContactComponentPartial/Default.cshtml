@@ -1,0 +1,80 @@
+﻿@model Contact
+<section id="contact">
+    <div class="container">
+        <div class="row gy-5">
+            <!-- Left Column: Contact Info -->
+            <div class="col-lg-5 reveal-on-scroll">
+                <div class="eyebrow-badge">
+                    <i class="bi bi-envelope-paper-fill"></i> İLETİŞİM İÇİN
+                </div>
+
+                <div class="d-flex flex-column gap-3 mb-4">
+                    <div class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3 shadow-sm">
+                        <div class="skill-icon-box mb-0" style="width: 44px; height: 44px; background: var(--bg-secondary);">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small">E-posta</div>
+                            <div class="fw-semibold">sefasubasii@gmail.com</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3 shadow-sm">
+                        <div class="skill-icon-box mb-0" style="width: 44px; height: 44px; background: var(--bg-secondary);">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Konum</div>
+                            <div class="fw-semibold">Kocaeli, Türkiye</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social links -->
+                <div class="pt-2">
+                    <div class="text-muted small font-heading fw-semibold mb-2">Sosyal Ağlar:</div>
+                    <div class="d-flex gap-2">
+                        <a href="https://linkedin.com/in/sefasubasi" target="_blank" rel="noopener noreferrer" class="social-pill" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="https://github.com/sefasubasi" target="_blank" rel="noopener noreferrer" class="social-pill" title="GitHub"><i class="bi bi-github"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Form -->
+            <div class="col-lg-7 ps-lg-5 reveal-on-scroll">
+                <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+                    <form asp-controller="Contact" asp-action="CreateContact" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="fullName" class="form-label small fw-semibold">Adınız Soyadınız *</label>
+                                <input type="text" asp-for="NameSurname" class="form-control" placeholder="Örn: Ahmet Yılmaz" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="emailAddr" class="form-label small fw-semibold">E-posta Adresiniz *</label>
+                                <input type="email" asp-for="Email" class="form-control" id="emailAddr" placeholder="ad@ornek.com" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="subject" class="form-label small fw-semibold">Konu</label>
+                                <input type="text" asp-for="Topic" class="form-control" placeholder="Örn: Kurumsal .NET Eğitimi veya Danışmanlık">
+                            </div>
+                            <div class="col-12">
+                                <label for="message" class="form-label small fw-semibold">Mesajınız *</label>
+                                <textarea asp-for="Message" class="form-control" rows="5" placeholder="Projeniz veya sorunuz hakkında detayları paylaşın..." required></textarea>
+                            </div>
+                            <div class="col-12 pt-2">
+                                <button type="submit" class="btn-sage w-100 justify-content-center py-3 fs-6">
+                                    <i class="bi bi-send-fill"></i>
+                                    <span>Mesajımı Gönder</span>
+                                </button>
+                                <div id="formFeedback" class="mt-2 text-center small text-muted"></div>
+                                <div class="text-muted text-center small mt-3" style="font-size: 0.78rem;">
+                                    <i class="bi bi-shield-check me-1"></i> Gönderilen bilgiler gizlilik ilkeleri doğrultusunda korunmaktadır.
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
