@@ -24,7 +24,7 @@ Uygulama; kişisel bilgilerin, yeteneklerin, profesyonel deneyimlerin, projeleri
 
 <p align="center">
   <img src="Sefa_Subasi_Portfolio/wwwroot/Images/about-section.png" width="49%" alt="Hakkımda bölümü" />
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/skills-section.png" width="49%" alt="Yetenekler bölümü" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/skills-section.png" width="49%" alt="Yetenekler bölümü" />
 </p>
 
 #### Deneyimler ve Projeler
