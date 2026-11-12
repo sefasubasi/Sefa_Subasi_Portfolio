@@ -181,3 +181,4 @@ Bu proje kişisel portfolyo amacıyla geliştirilmiştir.
 
 - GitHub: [@sefasubasi](https://github.com/sefasubasi)
 - Repository: [Sefa Subaşı Portfolio](https://github.com/sefasubasi/Sefa_Subasi_Portfolio)
+ 
