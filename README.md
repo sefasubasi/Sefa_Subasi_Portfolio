@@ -171,14 +171,4 @@ git commit -m "Yeni özellik eklendi"
 git push origin feature/yeni-ozellik
 ```
 
-## 📄 Lisans
-
-Bu proje kişisel portfolyo amacıyla geliştirilmiştir.
-
-## 👤 Geliştirici
-
-**Sefa Subaşı**
-
-- GitHub: [@sefasubasi](https://github.com/sefasubasi)
-- Repository: [Sefa Subaşı Portfolio](https://github.com/sefasubasi/Sefa_Subasi_Portfolio)
  
