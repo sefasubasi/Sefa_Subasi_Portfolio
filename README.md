@@ -176,7 +176,7 @@ Proje varsayılan olarak SQL Server LocalDB kullanacak şekilde yapılandırılm
 Örnek bağlantı bilgisi:
 
 ```text
-Server=(localdb)\MSSQLLocalDB;
+Server=(Your Database Name);
 Database=NewPortfolio;
 Integrated Security=True;
 Trusted_Connection=True;
@@ -246,7 +246,7 @@ git push origin feature/yeni-ozellik
 **Sefa Subaşı**
 
 - GitHub: [github.com/sefasubasi](https://github.com/sefasubasi)
-- Proje Deposu: [Sefa_Subasi_Portfolio](https://github.com/sefasubasi/Sefa_Subasi_Portfolio)
+- Linkedin: [Sefa_Subasi](https://linkedin.com/in/sefasubasi)
 
 ---
 
