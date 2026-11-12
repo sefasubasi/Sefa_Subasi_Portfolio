@@ -18,7 +18,7 @@ Uygulama; kişisel bilgilerin, yeteneklerin, profesyonel deneyimlerin, projeleri
 
 #### Ana Sayfa
 
-![Ana Sayfa](docs/Images/home-page.png)
+![Ana Sayfa](wwwroot/docs/Images/home-page.png)
 
 #### Hakkımda ve Yetenekler
 
