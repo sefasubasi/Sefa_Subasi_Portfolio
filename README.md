@@ -30,8 +30,8 @@ Uygulama; kişisel bilgilerin, yeteneklerin, profesyonel deneyimlerin, projeleri
 #### Deneyimler ve Projeler
 
 <p align="center">
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/experience-section.png" width="49%" alt="Deneyimler bölümü" />
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/projects-section.png" width="49%" alt="Projeler bölümü" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/experience-section.png" width="49%" alt="Deneyimler bölümü" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/projects-section.png" width="49%" alt="Projeler bölümü" />
 </p>
 
 #### Eğitim ve İletişim
