@@ -1,46 +1,103 @@
-
 # Sefa Subaşı Portfolio
 
-ASP.NET Core MVC ve Entity Framework Core kullanılarak geliştirilmiş kişisel portfolyo web uygulaması.
+ASP.NET Core MVC ve Entity Framework Core kullanılarak geliştirilen dinamik kişisel portfolyo web uygulaması.
 
-Uygulama; kişisel bilgiler, yetenekler, deneyimler, projeler, eğitim bilgileri ve iletişim mesajlarının yönetilebildiği dinamik bir portfolyo sitesidir.
+Uygulama; kişisel bilgilerin, yeteneklerin, profesyonel deneyimlerin, projelerin ve eğitim bilgilerinin yönetilebildiği, ziyaretçilere responsive bir arayüz sunan bir portfolyo sitesidir. Yönetim paneli üzerinden portfolyo içerikleri ve ziyaretçilerden gelen iletişim mesajları yönetilebilir.
 
-## 🚀 Kullanılan Teknolojiler
+## Kullanılan Teknolojiler
 
-- .NET 10
-- ASP.NET Core MVC
-- Entity Framework Core 10
-- Microsoft SQL Server
-- Razor View Engine
-- HTML5, CSS3 ve JavaScript
-- Bootstrap
-- SQL Server LocalDB
+- **Platform:** .NET 10, ASP.NET Core MVC
+- **ORM:** Entity Framework Core 10
+- **Veritabanı:** Microsoft SQL Server, SQL Server LocalDB
+- **View Engine:** Razor
+- **Frontend:** HTML5, CSS3, JavaScript, Bootstrap
 
-## ✨ Özellikler
+## Uygulama Ekran Görüntüleri
 
-### Ziyaretçi Sayfaları
+### Ziyaretçi Arayüzü
 
-- Kişisel tanıtım alanı
-- Hakkımda bölümü
-- Yetenekler
-- Profesyonel deneyimler
-- Projeler
-- Eğitim bilgileri
+#### Ana Sayfa
+
+![Ana Sayfa](docs/images/home-page.png)
+
+#### Hakkımda ve Yetenekler
+
+<p align="center">
+  <img src="docs/images/about-section.png" width="49%" alt="Hakkımda bölümü" />
+  <img src="docs/images/skills-section.png" width="49%" alt="Yetenekler bölümü" />
+</p>
+
+#### Deneyimler ve Projeler
+
+<p align="center">
+  <img src="docs/images/experience-section.png" width="49%" alt="Deneyimler bölümü" />
+  <img src="docs/images/projects-section.png" width="49%" alt="Projeler bölümü" />
+</p>
+
+#### Eğitim ve İletişim
+
+<p align="center">
+  <img src="docs/images/education-section.png" width="49%" alt="Eğitim bölümü" />
+  <img src="docs/images/contact-section.png" width="49%" alt="İletişim bölümü" />
+</p>
+
+### Yönetim Paneli
+
+#### Dashboard
+
+![Admin Dashboard](docs/images/admin-dashboard.png)
+
+Dashboard üzerinden mesaj istatistikleri, okunma oranları, proje ve deneyim dağılımı ile son mesajlar görüntülenebilir.
+
+#### İçerik Yönetimi
+
+<p align="center">
+  <img src="docs/images/admin-entry.png" width="49%" alt="Giriş alanı yönetimi" />
+  <img src="docs/images/admin-about.png" width="49%" alt="Hakkımda yönetimi" />
+</p>
+
+<p align="center">
+  <img src="docs/images/admin-skills.png" width="49%" alt="Yetenek yönetimi" />
+  <img src="docs/images/admin-experiences.png" width="49%" alt="Deneyim yönetimi" />
+</p>
+
+<p align="center">
+  <img src="docs/images/admin-projects.png" width="49%" alt="Proje yönetimi" />
+  <img src="docs/images/admin-education.png" width="49%" alt="Eğitim yönetimi" />
+</p>
+
+#### Mesaj Yönetimi ve Bildirimler
+
+<p align="center">
+  <img src="docs/images/admin-contact.png" width="49%" alt="İletişim mesajları" />
+  <img src="docs/images/admin-messages-notifications.png" width="49%" alt="Gelen mesajlar ve bildirimler" />
+</p>
+
+## Özellikler
+
+### Ziyaretçi Arayüzü
+
+- Kişisel tanıtım ve hakkımda bölümü
+- Yeteneklerin kategorilere göre listelenmesi
+- Profesyonel deneyimlerin görüntülenmesi
+- Projelerin ve ilişkili teknolojilerin listelenmesi
+- Eğitim bilgilerinin görüntülenmesi
 - İletişim formu
 - Responsive tasarım
 
-### Admin Paneli
+### Yönetim Paneli
 
-- Dashboard
-- Hakkımda bilgilerini güncelleme
-- Yetenek yönetimi
-- Deneyim yönetimi
-- Proje yönetimi
-- Eğitim bilgileri yönetimi
-- Gelen mesajları görüntüleme
-- Tanıtım alanlarını güncelleme
+- Dashboard ve özet istatistikler
+- Giriş/karşılama alanı ve profil görseli yönetimi
+- Hakkımda bilgilerinin güncellenmesi
+- Yetenek kategorileri ve yeteneklerin yönetimi
+- Deneyim kayıtları için CRUD işlemleri
+- Projelerin ve proje teknolojilerinin yönetimi
+- Eğitim kayıtları için CRUD işlemleri
+- Gelen iletişim mesajlarının listelenmesi ve yönetimi
+- Okunmamış mesaj bildirimleri
 
-## 📁 Proje Yapısı
+## Proje Yapısı
 
 ```text
 Sefa_Subasi_Portfolio/
@@ -66,83 +123,11 @@ Sefa_Subasi_Portfolio/
 └── Sefa_Subasi_Portfolio.csproj
 ```
 
-## ⚙️ Gereksinimler
+## Veritabanı Yapısı
 
-- .NET 10 SDK
-- Visual Studio 2026 veya üzeri
-- SQL Server LocalDB
-- Git
+Uygulamada Entity Framework Core ile SQL Server veritabanı kullanılmaktadır.
 
-.NET SDK sürümünü kontrol etmek için:
-
-```powershell
-dotnet --version
-```
-
-## 📥 Kurulum
-
-Projeyi klonlayın:
-
-```powershell
-git clone https://github.com/sefasubasi/Sefa_Subasi_Portfolio.git
-cd Sefa_Subasi_Portfolio
-dotnet restore
-dotnet build
-```
-
-## 🗄️ Veritabanı Ayarları
-
-Proje varsayılan olarak SQL Server LocalDB kullanır. Veritabanı yapılandırması `DAL/Context/PortfolioContext.cs` dosyasında bulunmaktadır.
-
-Varsayılan veritabanı bilgileri:
-
-```text
-Server=(localdb)\MSSQLLocalDB
-Database=NewPortfolio
-Integrated Security=True
-Trusted_Connection=True
-```
-
-Entity Framework migration kullanıyorsanız:
-
-```powershell
-dotnet ef migrations add InitialCreate
-dotnet ef database update
-```
-
-`dotnet ef` komutu yüklü değilse:
-
-```powershell
-dotnet tool install --global dotnet-ef
-```
-
-> Üretim ortamında bağlantı bilgilerini doğrudan kod içerisinde tutmak yerine `appsettings.json`, User Secrets veya ortam değişkenleri kullanın.
-
-## ▶️ Projeyi Çalıştırma
-
-```powershell
-dotnet run
-```
-
-Uygulama çalıştıktan sonra terminalde gösterilen HTTPS adresini tarayıcıda açın. Visual Studio ile çalıştırmak için `Sefa_Subasi_Portfolio.slnx` dosyasını açıp `F5` veya `Ctrl + F5` tuşlarına basabilirsiniz.
-
-## 🔐 Admin Paneli
-
-Admin alanı, MVC Area yönlendirmesi ile aşağıdaki formatta çalışır:
-
-```text
-https://localhost:<port>/Admin/<Controller>/<Action>
-```
-
-Örnek:
-
-```text
-https://localhost:<port>/Admin/About/Index
-```
-
-> Üretim ortamında admin paneli için kimlik doğrulama ve yetkilendirme eklenmesi gerekir.
-
-## 🧩 Veritabanı Entity'leri
+Tanımlı entity sınıfları:
 
 - `About`
 - `Skill`
@@ -155,7 +140,92 @@ https://localhost:<port>/Admin/About/Index
 - `Message`
 - `Feature`
 
-## 🛠️ Geliştirme
+## Gereksinimler
+
+- .NET 10 SDK
+- Visual Studio 2026 veya uyumlu bir .NET IDE
+- SQL Server LocalDB
+- Git
+
+.NET SDK sürümünü kontrol etmek için:
+
+```powershell
+dotnet --version
+```
+
+## Kurulum
+
+### 1. Depoyu klonlayın
+
+```powershell
+git clone https://github.com/sefasubasi/Sefa_Subasi_Portfolio.git
+cd Sefa_Subasi_Portfolio
+```
+
+### 2. Bağımlılıkları yükleyin ve projeyi derleyin
+
+```powershell
+dotnet restore
+dotnet build
+```
+
+## Veritabanı Yapılandırması
+
+Proje varsayılan olarak SQL Server LocalDB kullanacak şekilde yapılandırılmıştır. Bağlantı ayarları `DAL/Context/PortfolioContext.cs` dosyasında bulunmaktadır.
+
+Örnek bağlantı bilgisi:
+
+```text
+Server=(localdb)\MSSQLLocalDB;
+Database=NewPortfolio;
+Integrated Security=True;
+Trusted_Connection=True;
+```
+
+Entity Framework Core CLI yüklü değilse:
+
+```powershell
+dotnet tool install --global dotnet-ef
+```
+
+Mevcut migration'ları veritabanına uygulamak için:
+
+```powershell
+dotnet ef database update
+```
+
+Projede henüz migration bulunmuyorsa ilk migration oluşturulabilir:
+
+```powershell
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+```
+
+> Not: İlk migration komutunu yalnızca projede mevcut migration yoksa çalıştırın. Üretim ortamında bağlantı bilgilerini kaynak kodda tutmak yerine User Secrets veya ortam değişkenleri gibi güvenli yapılandırma yöntemlerini kullanın.
+
+## Uygulamayı Çalıştırma
+
+```powershell
+dotnet run
+```
+
+Uygulama çalıştıktan sonra terminalde görüntülenen HTTPS adresini tarayıcıda açın.
+
+Visual Studio üzerinden çalıştırmak için `Sefa_Subasi_Portfolio.slnx` dosyasını açıp `F5` veya `Ctrl + F5` tuşlarını kullanabilirsiniz.
+
+## Yönetim Paneli
+
+Yönetim paneli ASP.NET Core MVC Area yapısı üzerinden çalışmaktadır.
+
+Örnek adres:
+
+```text
+https://localhost:<port>/Admin/Dashboard/Index
+```
+
+> Güvenli bir canlı ortam için yönetim panelinde kimlik doğrulama ve rol/yetki kontrolleri yapılandırılmalıdır.
+
+## Geliştirme
 
 Yeni bir özellik için branch oluşturabilirsiniz:
 
@@ -163,7 +233,7 @@ Yeni bir özellik için branch oluşturabilirsiniz:
 git checkout -b feature/yeni-ozellik
 ```
 
-Değişiklikleri test ettikten sonra:
+Değişiklikleri kaydetmek ve göndermek için:
 
 ```powershell
 git add .
@@ -171,4 +241,13 @@ git commit -m "Yeni özellik eklendi"
 git push origin feature/yeni-ozellik
 ```
 
- 
+## Geliştirici
+
+**Sefa Subaşı**
+
+- GitHub: [github.com/sefasubasi](https://github.com/sefasubasi)
+- Proje Deposu: [Sefa_Subasi_Portfolio](https://github.com/sefasubasi/Sefa_Subasi_Portfolio)
+
+---
+
+Bu proje, kişisel çalışmalarımı, yazılım geliştirme deneyimimi ve teknik yetkinliklerimi sergilemek amacıyla geliştirilmiştir.
