@@ -23,7 +23,7 @@ Uygulama; kişisel bilgilerin, yeteneklerin, profesyonel deneyimlerin, projeleri
 #### Hakkımda ve Yetenekler
 
 <p align="center">
-  <img src="wwwroot/images/about-section.png" width="49%" alt="Hakkımda bölümü" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/about-section.png" width="49%" alt="Hakkımda bölümü" />
   <img src="wwwroot/docs/images/skills-section.png" width="49%" alt="Yetenekler bölümü" />
 </p>
 
