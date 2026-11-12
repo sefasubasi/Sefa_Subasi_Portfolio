@@ -37,40 +37,40 @@ Uygulama; kişisel bilgilerin, yeteneklerin, profesyonel deneyimlerin, projeleri
 #### Eğitim ve İletişim
 
 <p align="center">
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/education-section.png" width="49%" alt="Eğitim bölümü" />
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/contact-section.png" width="49%" alt="İletişim bölümü" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/education-section.png" width="49%" alt="Eğitim bölümü" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/contact-section.png" width="49%" alt="İletişim bölümü" />
 </p>
 
 ### Yönetim Paneli
 
 #### Dashboard
 
-![Admin Dashboard](docs/images/admin-dashboard.png)
+![Admin Dashboard](Sefa_Subasi_Portfolio/wwwroot/Images/admin-dashboard.png)
 
 Dashboard üzerinden mesaj istatistikleri, okunma oranları, proje ve deneyim dağılımı ile son mesajlar görüntülenebilir.
 
 #### İçerik Yönetimi
 
 <p align="center">
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/admin-entry.png" width="49%" alt="Giriş alanı yönetimi" />
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/admin-about.png" width="49%" alt="Hakkımda yönetimi" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/admin-entry.png" width="49%" alt="Giriş alanı yönetimi" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/admin-about.png" width="49%" alt="Hakkımda yönetimi" />
 </p>
 
 <p align="center">
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/admin-skills.png" width="49%" alt="Yetenek yönetimi" />
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/admin-experiences.png" width="49%" alt="Deneyim yönetimi" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/admin-skills.png" width="49%" alt="Yetenek yönetimi" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/admin-experiences.png" width="49%" alt="Deneyim yönetimi" />
 </p>
 
 <p align="center">
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/admin-projects.png" width="49%" alt="Proje yönetimi" />
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/admin-education.png" width="49%" alt="Eğitim yönetimi" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/admin-projects.png" width="49%" alt="Proje yönetimi" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/admin-education.png" width="49%" alt="Eğitim yönetimi" />
 </p>
 
 #### Mesaj Yönetimi ve Bildirimler
 
 <p align="center">
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/admin-contact.png" width="49%" alt="İletişim mesajları" />
-  <img src="Sefa_Subasi_Portfolio/wwwroot/images/admin-messages-notifications.png" width="49%" alt="Gelen mesajlar ve bildirimler" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/admin-contact.png" width="49%" alt="İletişim mesajları" />
+  <img src="Sefa_Subasi_Portfolio/wwwroot/Images/admin-messages-notifications.png" width="49%" alt="Gelen mesajlar ve bildirimler" />
 </p>
 
 ## Özellikler
