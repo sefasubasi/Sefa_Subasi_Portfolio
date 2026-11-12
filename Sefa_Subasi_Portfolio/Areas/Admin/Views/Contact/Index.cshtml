@@ -1,0 +1,392 @@
+﻿@model List<Sefa_Subasi_Portfolio.DAL.Entities.Contact>
+
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="contact-admin">
+
+    <div class="page-heading">
+        <div>
+            <h3>Gelen Mesajlar</h3>
+            <p>Portfolyo siten üzerinden gönderilen mesajları yönetebilirsin.</p>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <div class="message-card">
+
+        <div class="card-heading">
+            <div>
+                <h5>Mesaj Kutusu</h5>
+                <small>Ziyaretçilerden gelen iletişim mesajları</small>
+            </div>
+            <span class="count-badge">@Model.Count Mesaj</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table message-table align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Gönderen</th>
+                        <th>E-posta</th>
+                        <th>Konu</th>
+                        <th>Mesaj</th>
+                        <th class="text-end">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="id-badge">#@item.ContactId</span>
+                                </td>
+
+                                <td><strong>@item.NameSurname</strong></td>
+
+                                <td>@item.Email</td>
+
+                                <td>@item.Topic</td>
+
+                                <td>
+                                    <span class="message-preview">
+                                        @item.Message
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="actions">
+
+                                        <button type="button"
+                                                class="action-btn view-btn"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#messageModal"
+                                                data-name="@item.NameSurname"
+                                                data-email="@item.Email"
+                                                data-topic="@item.Topic"
+                                                data-message="@item.Message"
+                                                onclick="showMessage(this)">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+
+                                        <form asp-action="Delete"
+                                              method="post"
+                                              onsubmit="return confirm('Mesajı silmek istiyor musunuz?')">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden" name="id"
+                                                   value="@item.ContactId" />
+
+                                            <button type="submit"
+                                                    class="action-btn delete-btn">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <i class="bi bi-envelope-open"></i>
+                                <p>Henüz gelen mesaj bulunmuyor.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- MESAJ DETAY MODALI -->
+<div class="modal fade" id="messageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content message-modal">
+
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title">Mesaj Detayı</h5>
+                    <small>Gelen iletişim mesajı</small>
+                </div>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="detail-item">
+                    <label>Gönderen</label>
+                    <p id="detailName"></p>
+                </div>
+
+                <div class="detail-item">
+                    <label>E-posta</label>
+                    <p id="detailEmail"></p>
+                </div>
+
+                <div class="detail-item">
+                    <label>Konu</label>
+                    <p id="detailTopic"></p>
+                </div>
+
+                <div class="detail-item">
+                    <label>Mesaj</label>
+                    <div id="detailMessage" class="message-content"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .contact-admin {
+        padding: 26px;
+        color: #344b3e;
+    }
+
+    .page-heading {
+        margin-bottom: 22px;
+    }
+
+        .page-heading h3 {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .page-heading p {
+            color: #89958e;
+            margin: 0;
+        }
+
+    .contact-stat {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: white;
+        border: 1px solid #e7ebe8;
+        border-radius: 13px;
+        padding: 16px;
+        width: 230px;
+        margin-bottom: 22px;
+    }
+
+    .stat-icon {
+        width: 45px;
+        height: 45px;
+        background: #e7f0eb;
+        color: #355b48;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        font-size: 21px;
+    }
+
+    .contact-stat span {
+        color: #89958e;
+        font-size: 13px;
+    }
+
+    .contact-stat h3 {
+        margin: 3px 0 0;
+        font-weight: 700;
+    }
+
+    .message-card {
+        background: white;
+        border: 1px solid #e7ebe8;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 3px 12px rgba(40,70,50,.04);
+    }
+
+    .card-heading {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #edf0ed;
+    }
+
+        .card-heading h5 {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .card-heading small {
+            color: #89958e;
+        }
+
+    .count-badge, .id-badge {
+        background: #edf3ef;
+        color: #426650;
+        padding: 7px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+    }
+
+    .message-table {
+        min-width: 750px;
+        margin: 0;
+    }
+
+        .message-table thead th {
+            background: #f8faf8;
+            color: #87948c;
+            font-size: 12px;
+            padding: 15px;
+            border: 0;
+            white-space: nowrap;
+        }
+
+        .message-table tbody td {
+            padding: 16px 15px;
+            font-size: 13px;
+            border-color: #f0f2f0;
+            color: #53645a;
+        }
+
+    .message-preview {
+        display: block;
+        max-width: 180px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+        .actions form {
+            display: flex;
+        }
+
+    .action-btn {
+        width: 35px;
+        height: 35px;
+        border: 0;
+        border-radius: 9px;
+        cursor: pointer;
+    }
+
+    .view-btn {
+        background: #edf3ef;
+        color: #355b48;
+    }
+
+    .delete-btn {
+        background: #fff0ed;
+        color: #cb6557;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px !important;
+        color: #89958e !important;
+    }
+
+        .empty-state i {
+            font-size: 30px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+    .message-modal {
+        border: 0;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+        .message-modal .modal-header {
+            background: #f7faf8;
+            padding: 20px;
+        }
+
+        .message-modal .modal-title {
+            color: #355b48;
+            font-weight: 700;
+        }
+
+        .message-modal .modal-header small {
+            color: #89958e;
+        }
+
+        .message-modal .modal-body {
+            padding: 22px;
+        }
+
+    .detail-item {
+        margin-bottom: 17px;
+    }
+
+        .detail-item label {
+            font-size: 12px;
+            color: #89958e;
+            margin-bottom: 5px;
+        }
+
+        .detail-item p {
+            color: #344b3e;
+            font-weight: 600;
+            margin: 0;
+            overflow-wrap: anywhere;
+        }
+
+    .message-content {
+        background: #f7faf8;
+        padding: 14px;
+        border-radius: 9px;
+        color: #53645a;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    @@media(max-width: 768px) {
+        .contact-admin {
+            padding: 16px;
+        }
+
+        .contact-stat {
+            width: 100%;
+        }
+
+        .card-heading {
+            padding: 16px;
+        }
+    }
+</style>
+
+<script>
+    function showMessage(button) {
+        document.getElementById("detailName").textContent =
+            button.dataset.name;
+
+        document.getElementById("detailEmail").textContent =
+            button.dataset.email;
+
+        document.getElementById("detailTopic").textContent =
+            button.dataset.topic;
+
+        document.getElementById("detailMessage").textContent =
+            button.dataset.message;
+    }
+</script>

@@ -10,7 +10,11 @@ namespace Sefa_Subasi_Portfolio.ViewComponents.HomeViewComponents
 
         public IViewComponentResult Invoke()
         {
-            var skills = _context.Skills.Include(x => x.SkillItems).ToList();
+            var skills = _context.Skills
+                   .Include(x => x.SkillItems)
+                   .AsNoTracking()
+                   .ToList();
+
             return View(skills);
         }
     }

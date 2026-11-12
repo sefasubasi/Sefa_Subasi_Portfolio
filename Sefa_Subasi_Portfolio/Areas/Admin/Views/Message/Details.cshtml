@@ -1,0 +1,61 @@
+﻿@model Sefa_Subasi_Portfolio.DAL.Entities.Message
+
+@{
+    ViewData["Title"] = "Mesaj Detayı";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="message-admin">
+
+    <div class="page-heading">
+        <h3>Mesaj Detayı</h3>
+        <p>Gelen ziyaretçi mesajının detayları.</p>
+    </div>
+
+    <div class="message-card">
+
+        <div class="card-heading">
+            <div>
+                <h5>@Model.Subject</h5>
+                <small>Mesaj #@Model.MessageId</small>
+            </div>
+
+            <span class="status-badge read">
+                <i class="bi bi-check-circle"></i>
+                Okundu
+            </span>
+        </div>
+
+        <div class="p-4">
+
+            <div class="detail-item">
+                <label>Gönderen</label>
+                <p>@Model.SenderName</p>
+            </div>
+
+            <div class="detail-item">
+                <label>E-posta</label>
+                <p>@Model.SenderEmail</p>
+            </div>
+
+            <div class="detail-item">
+                <label>Gönderim Tarihi</label>
+                <p>@Model.SendDate.ToString("dd.MM.yyyy HH:mm")</p>
+            </div>
+
+            <div class="detail-item">
+                <label>Mesaj</label>
+                <div class="message-content">@Model.MessageDetail</div>
+            </div>
+
+            <a asp-area="Admin"
+               asp-controller="Message"
+               asp-action="Index"
+               class="btn btn-outline-secondary mt-3">
+                <i class="bi bi-arrow-left"></i>
+                Mesajlara Dön
+            </a>
+
+        </div>
+    </div>
+</div>

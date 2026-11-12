@@ -6,6 +6,6 @@
         public string Title { get; set; }
         public string Description { get; set; }
         public string Icon { get; set; }
-        public List<SkillItem> SkillItems { get; set; }
+        public ICollection<SkillItem> SkillItems { get; set; }= new List<SkillItem>();
     }
 }

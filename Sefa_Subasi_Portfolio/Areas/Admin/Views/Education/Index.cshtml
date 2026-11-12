@@ -1,0 +1,488 @@
+﻿@model List<Education>
+
+@{
+    ViewData["Title"] = "Education";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="page-content-area">
+
+    <div class="content-header-row">
+        <div>
+            <h3>Eğitim Yönetimi</h3>
+            <p>Eğitim bilgilerini buradan ekleyebilir ve yönetebilirsin.</p>
+        </div>
+
+        <button class="btn-pastel-primary" data-bs-toggle="modal"
+                data-bs-target="#educationModal" onclick="newEducation()">
+            <i class="bi bi-plus-lg"></i> Eğitim Ekle
+        </button>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["Success"]
+
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-exclamation-circle me-2"></i>
+            @TempData["Error"]
+
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="data-table-card">
+        <div class="table-heading">
+            <div>
+                <h5>Eğitim Geçmişim</h5>
+                <small>Kayıtlı eğitim bilgileri</small>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table custom-admin-table align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Eğitim / Bölüm</th>
+                        <th>Okul</th>
+                        <th>Tarih</th>
+                        <th>Açıklama</th>
+                        <th class="text-end">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><span class="id-badge">#@item.EducationId</span></td>
+
+                                <td>
+                                    <strong>@item.Title</strong>
+                                </td>
+
+                                <td>@item.SchoolName</td>
+
+                                <td>
+                                    <span class="date-badge">@item.Durum</span>
+                                </td>
+
+                                <td>
+                                    <span class="description-text">@item.Description</span>
+                                </td>
+
+                                <td>
+                                    <div class="row-actions-group justify-content-end">
+
+                                        <button type="button"
+                                                class="action-btn edit-btn"
+                                                title="Düzenle"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#educationModal"
+                                                data-id="@item.EducationId"
+                                                data-title="@item.Title"
+                                                data-school="@item.SchoolName"
+                                                data-date="@item.Durum"
+                                                data-description="@item.Description"
+                                                onclick="editEducation(this)">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+
+                                        <form asp-action="Delete" method="post"
+                                              onsubmit="return confirm('Bu eğitim kaydını silmek istediğinize emin misiniz?')">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@item.EducationId" />
+
+                                            <button type="submit" class="action-btn delete-btn" title="Sil">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <i class="bi bi-mortarboard empty-icon"></i>
+                                <p>Henüz eğitim kaydı eklenmemiş.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- EĞİTİM EKLE / GÜNCELLE MODALI -->
+<div class="modal fade" id="educationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content education-modal">
+
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="modalTitle">Yeni Eğitim Ekle</h5>
+                    <small>Eğitim bilgilerini doldur.</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form id="educationForm" asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="modal-body">
+
+                    <input type="hidden" name="EducationId" id="educationId" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Eğitim / Bölüm Adı</label>
+                        <input type="text" name="Title" id="educationTitle"
+                               class="form-control form-control-custom"
+                               placeholder="Bilgisayar Mühendisliği" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Okul / Üniversite</label>
+                        <input type="text" name="SchoolName" id="schoolName"
+                               class="form-control form-control-custom"
+                               placeholder="Üniversite adı" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tarih</label>
+                        <input type="text" name="Durum" id="educationDate"
+                               class="form-control form-control-custom"
+                               placeholder="Örn: Kas 2025" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Açıklama</label>
+                        <textarea name="Description" id="educationDescription"
+                                  class="form-control form-control-custom"
+                                  rows="3" placeholder="Eğitim hakkında kısa bilgi..."
+                                  required></textarea>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-pastel-secondary"
+                            data-bs-dismiss="modal">
+                        Vazgeç
+                    </button>
+
+                    <button type="submit" class="btn-pastel-primary">
+                        <i class="bi bi-check-lg"></i>
+                        Kaydet
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .page-content-area {
+        padding: 28px;
+        color: #33483d;
+    }
+
+    .content-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+        .content-header-row h3 {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .content-header-row p,
+        .table-heading small {
+            color: #89958e;
+            margin: 0;
+        }
+
+    .btn-pastel-primary, .btn-pastel-secondary {
+        border: 0;
+        padding: 10px 17px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        cursor: pointer;
+    }
+
+    .btn-pastel-primary {
+        background: #355b48;
+        color: white;
+    }
+
+        .btn-pastel-primary:hover {
+            background: #284a39;
+            color: white;
+        }
+
+    .btn-pastel-secondary {
+        background: #edf2ee;
+        color: #52675b;
+    }
+
+    .stats-row {
+        margin-bottom: 22px;
+    }
+
+    .education-stat {
+        background: white;
+        border: 1px solid #e6ebe7;
+        border-radius: 14px;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 240px;
+        box-shadow: 0 3px 12px rgba(40,70,50,.04);
+    }
+
+    .stat-icon {
+        background: #e7f0eb;
+        color: #355b48;
+        border-radius: 12px;
+        width: 45px;
+        height: 45px;
+        display: grid;
+        place-items: center;
+        font-size: 22px;
+    }
+
+    .education-stat span {
+        color: #89958e;
+        font-size: 13px;
+    }
+
+    .education-stat h3 {
+        margin: 3px 0 0;
+        font-weight: 700;
+    }
+
+    .data-table-card {
+        background: white;
+        border: 1px solid #e7ebe8;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 3px 12px rgba(40,70,50,.04);
+    }
+
+    .table-heading {
+        padding: 20px;
+        border-bottom: 1px solid #edf0ed;
+    }
+
+        .table-heading h5 {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+    .custom-admin-table {
+        margin: 0;
+        min-width: 700px;
+    }
+
+        .custom-admin-table thead th {
+            background: #f8faf8;
+            color: #87948c;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 15px;
+            border: 0;
+            white-space: nowrap;
+        }
+
+        .custom-admin-table tbody td {
+            padding: 17px 15px;
+            border-color: #f0f2f0;
+            color: #53645a;
+            font-size: 13px;
+        }
+
+        .custom-admin-table tbody tr:hover {
+            background: #fafcfb;
+        }
+
+    .id-badge, .date-badge {
+        background: #edf3ef;
+        color: #426650;
+        padding: 6px 10px;
+        border-radius: 7px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .description-text {
+        display: inline-block;
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .row-actions-group {
+        display: flex;
+        gap: 8px;
+    }
+
+        .row-actions-group form {
+            display: inline-flex;
+        }
+
+    .action-btn {
+        width: 34px;
+        height: 34px;
+        border: 0;
+        border-radius: 9px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+    }
+
+    .edit-btn {
+        background: #edf3ef;
+        color: #355b48;
+    }
+
+    .delete-btn {
+        background: #fff0ed;
+        color: #cb6557;
+    }
+
+    .education-modal {
+        border: 0;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+        .education-modal .modal-header {
+            padding: 20px;
+            background: #f7faf8;
+            border-bottom: 1px solid #edf0ed;
+        }
+
+        .education-modal .modal-title {
+            font-weight: 700;
+            color: #355b48;
+        }
+
+        .education-modal .modal-header small {
+            color: #89958e;
+        }
+
+        .education-modal .modal-body {
+            padding: 22px;
+        }
+
+    .form-control-custom {
+        border: 1px solid #e0e8e2;
+        border-radius: 9px;
+        padding: 11px 13px;
+        font-size: 14px;
+    }
+
+        .form-control-custom:focus {
+            border-color: #739681;
+            box-shadow: 0 0 0 3px rgba(53,91,72,.08);
+        }
+
+    .education-modal .form-label {
+        color: #52675b;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .education-modal .modal-footer {
+        padding: 15px 22px;
+        border-top: 1px solid #edf0ed;
+    }
+
+    .empty-icon {
+        display: block;
+        font-size: 35px;
+        color: #9eb5a5;
+        margin-bottom: 10px;
+    }
+
+    @@media (max-width: 768px) {
+        .page-content-area {
+            padding: 16px;
+        }
+
+        .content-header-row {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .education-stat {
+            width: 100%;
+        }
+
+        .content-header-row button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+
+<script>
+    const createUrl = '@Url.Action("Create", "Education", new { area = "Admin" })';
+    const updateUrl = '@Url.Action("Update", "Education", new { area = "Admin" })';
+
+    const educationForm = document.getElementById("educationForm");
+
+    function newEducation() {
+        educationForm.reset();
+        educationForm.action = createUrl;
+
+        document.getElementById("educationId").value = "";
+        document.getElementById("modalTitle").innerText = "Yeni Eğitim Ekle";
+    }
+
+    function editEducation(button) {
+        educationForm.action = updateUrl;
+
+        document.getElementById("modalTitle").innerText = "Eğitimi Güncelle";
+        document.getElementById("educationId").value = button.dataset.id;
+        document.getElementById("educationTitle").value = button.dataset.title;
+        document.getElementById("schoolName").value = button.dataset.school;
+        document.getElementById("educationDate").value = button.dataset.date;
+        document.getElementById("educationDescription").value = button.dataset.description;
+    }
+</script>

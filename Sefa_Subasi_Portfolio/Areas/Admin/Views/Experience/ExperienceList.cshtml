@@ -1,0 +1,259 @@
+﻿@model List<Experience>
+
+@{
+    ViewData["Title"] = "ExperienceList";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<!-- CONTENT BODY -->
+<main class="page-content-area">
+
+    <!-- Page Header Row -->
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Deneyimlerim Listesi</h1>
+            <p class="page-subtitle">Portfolyo sitenizde yer alacak deneyim içeriklerini buradan yönetebilirsiniz.</p>
+        </div>
+    </div>
+
+    <!-- 4 Statistics Summary Cards -->
+    <div class="stats-row">
+        <!-- 1. Toplam Deneyim -->
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-green">
+                <i class="bi bi-briefcase"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Toplam Deneyim</span>
+                <h3 class="stat-value" id="statTotalCount">@ViewBag.ExperiencesCount</h3>
+            </div>
+        </div>
+
+        <!-- 4. Son Güncelleme -->
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-purple">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Son Güncelleme</span>
+                <h3 class="stat-value" style="font-size: 1.05rem; font-weight: 700; line-height: 1.4;">
+                    @(ViewBag.LastUpdate != null
+                        ? ((DateTime)ViewBag.LastUpdate).ToString("dd MMMM yyyy - HH:mm:ss",
+                            new System.Globalization.CultureInfo("tr-TR"))
+                        : "Henüz güncelleme yok")
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Experience Table Container -->
+    <div class="data-table-card">
+
+        <!-- Filter / Action Toolbar -->
+        <div class="table-filter-bar">
+            <div class="filters-left-group">
+                <div class="filter-search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="tableSearchInput" placeholder="Deneyim başlığına göre ara...">
+                </div>
+            </div>
+
+            <div class="filters-right-group">
+                <a href="/Admin/Experience/Export" class="btn-pastel-secondary" id="btnExport">
+                    <i class="bi bi-download"></i>
+                    <span>Dışa Aktar</span>
+                </a>
+                <a href="#Ekle" class="btn-pastel-primary" style="padding: 7px 14px; font-size: 0.8rem;">
+                    <i class="bi bi-plus-lg"></i>
+                    <span>Ekle</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Experience Table -->
+        <div class="table-responsive-wrapper">
+            <table class="custom-admin-table" id="experienceTable">
+                <thead>
+                    <tr>
+                        <th style="width: 44px; text-align: center;">
+                            <input type="checkbox" class="custom-checkbox" id="selectAllCheckbox" title="Tümünü Seç">
+                        </th>
+                        <th style="width: 60px;">ID</th>
+                        <th>Deneyim Başlığı</th>
+                        <th>Kurum / Şirket</th>
+                        <th>Detay</th>
+                        <th>Tarih</th>
+                        <th style="text-align: right; width: 140px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody id="experienceTableBody">
+                    <!-- Record -->
+                    @foreach(var item in Model)
+                    {
+                    <tr>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="custom-checkbox row-select-checkbox">
+                        </td>
+                        <td class="col-id">@item.ExperienceId</td>
+                        <td>
+                            <div class="experience-title-cell">
+                                <div class="exp-icon-bullet">
+                                    <i class="bi bi-laptop"></i>
+                                </div>
+                                <div>
+                                    <span class="exp-title-text">@item.Title</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="company-cell">
+                                <i class="bi bi-building company-badge-icon"></i>
+                                <span>@item.Head</span>
+                            </div>
+                        </td>
+                            <td>
+                                <div class="company-cell">
+                                    <i class="bi bi-building accordion-body"></i>
+                                    <span>@item.Description</span>
+                                </div>
+                            </td>
+                        <td>
+                            <span class="date-badge">
+                                <i class="bi bi-calendar2-range"></i>
+                                @item.ExperienceDate.ToShortDateString()
+                            </span>
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="row-actions-group justify-content-end">
+                                    <a href="/Admin/Experience/updateExperience/@item.ExperienceId" class="btn-action-icon btn-edit" title="Güncelle">
+                                    <i class="bi bi-pencil-square"></i>
+                                     </a>
+                                    <a href="/Admin/Experience/deleteExperience/@item.ExperienceId" class="btn-action-icon btn-delete" title="Sil">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Table Footer: Pagination & Counter -->
+        <div class="table-footer-area">
+            <div class="pagination-counter">
+                Toplam <strong>@ViewBag.ExperiencesCount</strong> kayıttan <strong>1-@ViewBag.ExperiencesCount</strong> arası gösteriliyor
+            </div>
+            <ul class="custom-pagination">
+                <li class="page-nav-item">
+                    <a href="#" class="page-nav-btn disabled" title="Önceki Sayfa">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+                <li class="page-nav-item">
+                    <a href="#" class="page-nav-btn active">1</a>
+                </li>
+                <li class="page-nav-item">
+                    <a href="#" class="page-nav-btn disabled" title="Sonraki Sayfa">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Quick Add / Edit Side Panel & ASP.NET Core Integration Note -->
+    <div class="side-drawer-card">
+        <div class="drawer-header">
+            <div>
+                <h3 class="drawer-title">
+                    <i class="bi bi-plus-square"></i>
+                    Hızlı Deneyim Oluşturma Paneli
+                </h3>
+            </div>
+        </div>
+
+        <form asp-area="Admin"
+              asp-controller="Experience"
+              asp-action="AddExperience"
+              method="post"
+              id="Ekle">
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label-custom">
+                        Deneyim Başlığı
+                        <span class="required-star">*</span>
+                    </label>
+
+                    <input type="text"
+                           name="Title"
+                           class="form-control-custom"
+                           placeholder="Örn: Senior Full Stack Developer"
+                           required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label-custom">
+                        Şirket / Kurum Adı
+                        <span class="required-star">*</span>
+                    </label>
+
+                    <input type="text"
+                           name="Head"
+                           class="form-control-custom"
+                           placeholder="Örn: Acme Tech Ltd."
+                           required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label-custom">
+                        Detay
+                        <span class="required-star">*</span>
+                    </label>
+
+                    <textarea name="Description"
+                              class="form-control-custom"
+                              placeholder="Örn: Şirket ve yaptıkların hakkında"
+                              required></textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label-custom">Tarih</label>
+
+                    <input type="date"
+                           name="ExperienceDate"
+                           class="form-control-custom">
+                </div>
+
+                <div class="col-md-12 d-flex align-items-end justify-content-end gap-2">
+
+                    <button type="reset"
+                            class="btn-pastel-secondary"
+                            style="padding: 8px 14px;">
+                        İptal
+                    </button>
+
+                    <button type="submit"
+                            class="btn-pastel-primary"
+                            style="padding: 8px 20px;">
+                        <i class="bi bi-check-lg"></i>
+                        <span>Kaydet</span>
+                    </button>
+
+                </div>
+
+            </div>
+        </form>
+
+</main>
+    <script>
+        document.getElementById("tableSearchInput").addEventListener("keyup", function () {
+            let value = this.value.toLowerCase();
+
+            document.querySelectorAll("#experienceTableBody tr").forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+            });
+        });
+    </script>

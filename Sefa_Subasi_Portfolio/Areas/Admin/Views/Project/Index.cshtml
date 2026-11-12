@@ -1,0 +1,360 @@
+﻿@model List<Sefa_Subasi_Portfolio.DAL.Entities.Project>
+
+@{
+    ViewData["Title"] = "Project";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+
+<style>
+    .project-page {
+        padding: 28px;
+        color: #394b43;
+    }
+
+    .project-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 28px;
+    }
+
+    .project-header h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 7px;
+    }
+
+    .project-header p {
+        color: #98a69e;
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .add-project {
+        background: #628b73;
+        color: white;
+        padding: 11px 17px;
+        border-radius: 9px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: .2s;
+    }
+
+    .add-project:hover {
+        background: #4e765e;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .project-info {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 25px;
+    }
+
+    .info-card {
+        background: #fff;
+        border: 1px solid #eeeee9;
+        border-radius: 13px;
+        padding: 20px 24px;
+        min-width: 200px;
+    }
+
+    .info-card span {
+        color: #99a69e;
+        font-size: 12px;
+    }
+
+    .info-card h2 {
+        font-size: 27px;
+        font-weight: 700;
+        margin: 8px 0 0;
+        color: #557d65;
+    }
+
+    .project-container {
+        background: #fff;
+        border: 1px solid #eeeee9;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .container-header {
+        padding: 22px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #f1f1ed;
+    }
+
+    .container-header h5 {
+        font-size: 15px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .container-header span {
+        font-size: 12px;
+        color: #a0aaa3;
+    }
+
+    .project-table {
+        margin: 0;
+        min-width: 750px;
+    }
+
+    .project-table thead {
+        background: #fafbf9;
+    }
+
+    .project-table th {
+        padding: 16px 20px;
+        font-size: 10px;
+        letter-spacing: .6px;
+        color: #9ba79f;
+        font-weight: 700;
+        border: 0;
+    }
+
+    .project-table td {
+        padding: 19px 20px;
+        vertical-align: middle;
+        border-color: #f3f3ef;
+        font-size: 13px;
+    }
+
+    .project-title {
+        font-weight: 650;
+        color: #3e5146;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .project-description {
+        color: #a0aaa3;
+        font-size: 11px;
+        display: block;
+        max-width: 230px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .category-tag {
+        background: #f1f5f1;
+        color: #65836e;
+        border-radius: 6px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .tech-tag {
+        display: inline-block;
+        background: #f3f5f3;
+        color: #708078;
+        padding: 5px 8px;
+        border-radius: 5px;
+        font-size: 10px;
+        margin: 2px;
+    }
+
+    .action-area {
+        display: flex;
+        gap: 7px;
+    }
+
+    .action-btn {
+        width: 33px;
+        height: 33px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .edit-btn {
+        background: #eef4ef;
+        color: #63836d;
+    }
+
+    .delete-btn {
+        background: #fff1ef;
+        color: #d47c73;
+    }
+
+    .action-btn:hover {
+        filter: brightness(.95);
+    }
+
+    .action-area form {
+        margin: 0;
+    }
+
+    .website-link {
+        color: #628b73;
+        text-decoration: none;
+        font-size: 12px;
+    }
+
+    .empty-project {
+        padding: 55px 20px;
+        text-align: center;
+        color: #9ba79f;
+    }
+
+    .empty-project i {
+        font-size: 35px;
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    @@media(max-width: 768px) {
+        .project-page {
+            padding: 15px;
+        }
+
+        .project-header {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .project-info {
+            width: 100%;
+        }
+
+        .info-card {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="project-page">
+
+    <div class="project-header">
+        <div>
+            <h3>Projelerim</h3>
+            <p>Portfolyodaki projelerini yönet ve güncel tut.</p>
+        </div>
+
+        <a asp-action="Create" class="add-project">
+            <i class="bi bi-plus-lg me-1"></i> Yeni Proje Ekle
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    <div class="project-container">
+
+        <div class="container-header">
+            <h5>Proje Listesi</h5>
+            <span>@Model.Count proje kayıtlı</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table project-table">
+                <thead>
+                    <tr>
+                        <th>PROJE ADI</th>
+                        <th>KATEGORİ</th>
+                        <th>TEKNOLOJİLER</th>
+                        <th>WEB SİTESİ</th>
+                        <th>İŞLEMLER</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="project-title">@item.Head</span>
+                                    <span class="project-description">@item.Detail</span>
+                                </td>
+
+                                <td>
+                                    <span class="category-tag">
+                                        @item.ProjectCategory
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @foreach (var tech in item.ProjectTechnologies)
+                                    {
+                                        <span class="tech-tag">
+                                            @tech.ProjectTechnologyName
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.WebSite))
+                                    {
+                                        <a href="@item.WebSite"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           class="website-link">
+                                            Görüntüle <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <div class="action-area">
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.ProjectId"
+                                           class="action-btn edit-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        <form asp-action="Delete"
+                                              asp-route-id="@item.ProjectId"
+                                              method="post"
+                                              onsubmit="return confirm('Projeyi silmek istiyor musun?')">
+                                            @Html.AntiForgeryToken()
+
+                                            <button class="action-btn delete-btn"
+                                                    type="submit">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5">
+                                <div class="empty-project">
+                                    <i class="bi bi-folder2-open"></i>
+                                    <h5>Henüz proje eklenmemiş</h5>
+                                    <p>İlk projenizi ekleyerek başlayabilirsiniz.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

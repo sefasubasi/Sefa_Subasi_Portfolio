@@ -12,6 +12,8 @@ namespace Sefa_Subasi_Portfolio.ViewComponents.HomeViewComponents
             ViewBag.Title = context.Abouts.Select(x => x.Title).FirstOrDefault();
             ViewBag.SubDescription = context.Abouts.Select(x => x.SubDescription).FirstOrDefault();
             ViewBag.Details = context.Abouts.Select(x => x.Details).FirstOrDefault();
+            ViewBag.AboutImgUrl = context.Abouts.Select(x => x.AboutImgUrl).FirstOrDefault();
+
 
             return View();
         }

@@ -1,0 +1,309 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using Sefa_Subasi_Portfolio.DAL.Context
+
+@inject PortfolioContext DbContext
+
+@{
+    var unreadMessages = await DbContext.Messages
+        .Where(x => !x.IsRead)
+        .OrderByDescending(x => x.SendDate)
+        .ToListAsync();
+
+    var unreadCount = unreadMessages.Count;
+}
+<header class="admin-navbar">
+      <div class="navbar-left">
+        <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Menüyü Aç/Kapat">
+          <i class="bi bi-list"></i>
+        </button>
+        <div class="breadcrumb-custom">
+          <a href="/Admin/Dashboard/Index"><i class="bi bi-house me-1"></i> Ana Sayfa</a>
+          <span class="separator">/</span>
+            <span class="active-crumb">@ViewData["Title"]</span>
+        </div>
+      </div>
+
+      <div class="navbar-right">
+
+        <!-- Notification Bell -->
+        <div class="dropdown">
+
+            <a href="#"
+               class="icon-action-btn notification-bell"
+               title="Bildirimler"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+
+                <i class="bi bi-bell"></i>
+
+                @if (unreadCount > 0)
+                {
+                    <span class="notification-count">
+                        @(unreadCount > 99 ? "99+" : unreadCount.ToString())
+                    </span>
+                }
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+
+                <li class="notification-heading">
+                    <div>
+                        <h6>Bildirimler</h6>
+                        <small>@unreadCount okunmamış mesaj</small>
+                    </div>
+
+                    <i class="bi bi-bell"></i>
+                </li>
+
+                @if (unreadMessages.Any())
+                {
+                    @foreach (var item in unreadMessages)
+                    {
+                        <li>
+                            <a class="dropdown-item notification-item"
+                               href="@Url.Action("Index", "Message", new { area = "Admin" })">
+
+                                <div class="notification-avatar">
+                                    @(string.IsNullOrEmpty(item.SenderName)
+                                        ? "?"
+                                        : item.SenderName.Substring(0, 1).ToUpper())
+                                </div>
+
+                                <div class="notification-content">
+                                    <strong>@item.SenderName</strong>
+                                    <span>@item.Subject</span>
+                                    <small>
+                                        @item.SendDate.ToString("dd.MM.yyyy HH:mm")
+                                    </small>
+                                </div>
+
+                                <span class="unread-indicator"></span>
+                            </a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="notification-empty">
+                        <i class="bi bi-check-circle"></i>
+                        <p>Yeni bildirimin bulunmuyor.</p>
+                    </li>
+                }
+
+                <li>
+                    <hr class="dropdown-divider m-0">
+                </li>
+
+                <li>
+                    <a class="notification-footer"
+                       href="/Admin/Message/Index">
+                        Tüm mesajları gör
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+        <!-- Admin Profile Dropdown -->
+        <div class="dropdown">
+            <button class="nav-profile-pill border-0"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+
+                <div class="nav-avatar-mini">SS</div>
+
+                <span class="d-none d-sm-inline font-weight-600"
+                      style="font-size:0.825rem; font-weight:600;">
+                    Admin
+                </span>
+
+                <i class="bi bi-chevron-down text-muted"
+                   style="font-size: 0.7rem;"></i>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                <li>
+
+                <a href="/Home/Index" type="submit" class="dropdown-item text-danger">
+                    <i class="bi bi-box-arrow-right me-2"></i>
+                    Çıkış Yap
+                </a>
+                </li>
+            </ul>
+        </div>
+       </div>
+        </header>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    /* Bildirim zili */
+    .notification-bell {
+        position: relative;
+    }
+
+    /* Okunmamış mesaj sayısı */
+    .notification-count {
+        position: absolute;
+        top: -7px;
+        right: -7px;
+        min-width: 19px;
+        height: 19px;
+        padding: 0 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #dc5555;
+        color: white;
+        border: 2px solid white;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    /* Dropdown */
+    .notification-dropdown {
+        width: 330px;
+        padding: 0;
+        margin-top: 12px !important;
+        border: 1px solid #ebe8e1;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0,0,0,.09);
+    }
+
+    /* Başlık */
+    .notification-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        border-bottom: 1px solid #ebe8e1;
+    }
+
+        .notification-heading h6 {
+            margin: 0;
+            color: #344b3e;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .notification-heading small {
+            display: block;
+            margin-top: 4px;
+            color: #89958e;
+            font-size: 11px;
+        }
+
+        .notification-heading > i {
+            color: #355b48;
+            font-size: 20px;
+        }
+
+    /* Mesaj satırı */
+    .notification-item {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 13px 15px !important;
+        white-space: normal;
+        border-bottom: 1px solid #f0f0ec;
+    }
+
+        .notification-item:hover {
+            background: #f5f8f5;
+        }
+
+    /* Avatar */
+    .notification-avatar {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+        background: #e7efe9;
+        color: #355b48;
+        border-radius: 50%;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    /* Mesaj bilgileri */
+    .notification-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+        .notification-content strong,
+        .notification-content span,
+        .notification-content small {
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .notification-content strong {
+            color: #344b3e;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .notification-content span {
+            margin-top: 3px;
+            color: #737e76;
+            font-size: 11px;
+        }
+
+        .notification-content small {
+            margin-top: 4px;
+            color: #a0a8a1;
+            font-size: 10px;
+        }
+
+    /* Okunmamış işareti */
+    .unread-indicator {
+        width: 8px;
+        height: 8px;
+        flex-shrink: 0;
+        background: #dc5555;
+        border-radius: 50%;
+    }
+
+    /* Boş bildirim */
+    .notification-empty {
+        padding: 25px 15px;
+        text-align: center;
+        color: #89958e;
+    }
+
+        .notification-empty i {
+            color: #43865e;
+            font-size: 25px;
+        }
+
+        .notification-empty p {
+            margin: 7px 0 0;
+            font-size: 12px;
+        }
+
+    /* Tüm mesajlar */
+    .notification-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 13px;
+        color: #355b48;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .notification-footer:hover {
+            background: #f5f8f5;
+            color: #244a3d;
+        }
+
+</style>

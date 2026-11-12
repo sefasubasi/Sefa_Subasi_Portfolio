@@ -11,6 +11,7 @@ builder.Services.AddDbContext<PortfolioContext>();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -25,6 +26,14 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+
+app.UseEndpoints(endpoints =>
+{
+    app.MapControllerRoute(
+     name: "areas",
+     pattern: "{area:exists}/{controller=AdminLayout}/{action=Index}/{id?}");
+});
 
 app.MapControllerRoute(
     name: "default",

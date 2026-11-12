@@ -1,0 +1,446 @@
+﻿@model Sefa_Subasi_Portfolio.DAL.Entities.Feature
+
+@{
+    ViewData["Title"] = "Giriş Düzenle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<style>
+    .feature-content {
+        padding: 30px;
+        background: #f8f7f4;
+        min-height: calc(100vh - 85px);
+        color: #343a40;
+    }
+
+    .page-heading {
+        margin-bottom: 25px;
+    }
+
+        .page-heading h4 {
+            font-size: 21px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .page-heading p {
+            color: #92918e;
+            font-size: 13px;
+            margin: 0;
+        }
+
+    .edit-card {
+        background: #fff;
+        border: 1px solid #eae7e1;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 20px;
+    }
+
+    .card-heading {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+        .card-heading i {
+            color: #a58d78;
+            font-size: 18px;
+        }
+
+    .form-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #62615f;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border: 1px solid #e9e6e0;
+        border-radius: 8px;
+        padding: 11px 13px;
+        font-size: 13px;
+        background: #fff;
+        box-shadow: none !important;
+    }
+
+        .form-control:focus {
+            border-color: #c9b6a6;
+        }
+
+    textarea.form-control {
+        min-height: 125px;
+        resize: vertical;
+    }
+
+    .image-container {
+        background: #f8f7f4;
+        border: 1px solid #eeeae4;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .image-preview {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 7px;
+    }
+
+    .image-placeholder {
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #aaa;
+        background: #f1efeb;
+        border-radius: 7px;
+        font-size: 35px;
+    }
+
+    .image-info {
+        font-size: 11px;
+        color: #999;
+        margin-top: 10px;
+    }
+
+    .save-button {
+        background: #a58d78;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 11px 23px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: .2s;
+    }
+
+        .save-button:hover {
+            background: #8e7662;
+            color: white;
+        }
+
+    .reset-button {
+        background: white;
+        border: 1px solid #e6e1da;
+        border-radius: 8px;
+        padding: 11px 20px;
+        font-size: 13px;
+        color: #666;
+    }
+
+        .reset-button:hover {
+            background: #f8f7f4;
+        }
+
+    .bottom-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    @@media(max-width:768px) {
+        .feature-content {
+            padding: 16px;
+        }
+
+        .edit-card {
+            padding: 17px;
+        }
+
+        .bottom-actions {
+            flex-direction: column;
+        }
+
+            .bottom-actions button {
+                width: 100%;
+            }
+    }
+</style>
+
+<div class="feature-content">
+
+    <!-- Sayfa Başlığı -->
+    <div class="page-heading">
+        <h4>Giriş Sayfası</h4>
+        <p>Ana sayfandaki karşılama alanını buradan düzenleyebilirsin.</p>
+    </div>
+
+    <!-- Güncelleme Formu -->
+    <form id="featureForm"
+          asp-area="Admin"
+          asp-controller="Enter"
+          asp-action="FeatureUpdate"
+          method="post"
+          enctype="multipart/form-data">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="FeatureId" />
+
+        <div class="row">
+
+            <!-- SOL TARAF: İÇERİK -->
+            <div class="col-lg-8">
+
+                <div class="edit-card">
+
+                    <div class="card-heading">
+                        <i class="bi bi-pencil-square"></i>
+                        Genel Bilgiler
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">İsim / Karşılama</label>
+
+                        <input asp-for="FeatureName"
+                               class="form-control"
+                               placeholder="Merhaba, ben Sefa..." required/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ana Başlık</label>
+
+                        <input asp-for="FeatureTitle"
+                               class="form-control"
+                               placeholder="Ana başlığını gir..." required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Başlık</label>
+
+                        <input asp-for="FeatureHead"
+                               class="form-control"
+                               placeholder="Başlık gir..." required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Alt Başlık</label>
+
+                        <input asp-for="FeatureSubtitle"
+                               class="form-control"
+                               placeholder="Alt başlık gir..." required />
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label">Açıklama</label>
+
+                        <textarea asp-for="FeatureDetail"
+                                  class="form-control"
+                                  placeholder="Kendinden bahset..." required></textarea>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- SAĞ TARAF: RESİM -->
+            <div class="col-lg-4">
+
+                <div class="edit-card">
+
+                    <div class="card-heading">
+                        <i class="bi bi-image"></i>
+                        Profil Görseli
+                    </div>
+
+                    <div class="image-container">
+
+                        @if (!string.IsNullOrEmpty(Model?.FeatureImgUrl))
+                        {
+                            <img id="imagePreview"
+                                 src="@Model.FeatureImgUrl"
+                                 class="image-preview"
+                                 alt="Mevcut profil görseli" />
+                        }
+                        else
+                        {
+                            <div id="imagePlaceholder"
+                                 class="image-placeholder">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+                            <img id="imagePreview"
+                                 class="image-preview d-none"
+                                 alt="Yeni profil görseli" />
+                        }
+
+                    </div>
+
+                    <div class="mt-3">
+
+                        <label class="form-label">
+                            Yeni Görsel Seç
+                        </label>
+
+                        <input type="file"
+                               name="imageFile"
+                               id="imageFile"
+                               class="form-control"
+                               accept=".jpg,.jpeg,.png,.webp" />
+
+                        <div class="image-info">
+                            <i class="bi bi-info-circle"></i>
+                            JPG, PNG veya WEBP formatı. Maksimum 5 MB.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ALT BUTONLAR -->
+        <div class="edit-card">
+
+            <div class="bottom-actions">
+
+                <button type="submit" class="save-button">
+                    <i class="bi bi-check2-circle"></i>
+                    Değişiklikleri Kaydet
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- SWEETALERT VE JAVASCRIPT -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    const form = document.getElementById("featureForm");
+
+    const imageInput = document.getElementById("imageFile");
+
+    const preview = document.getElementById("imagePreview");
+
+    const placeholder = document.getElementById("imagePlaceholder");
+
+    // İlk resim değerini sakla
+    const originalImage = preview.getAttribute("src");
+
+    const hasOriginalImage =
+        originalImage && originalImage.trim() !== "";
+
+    // Resim önizleme
+    imageInput.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (!file) return;
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+
+            Swal.fire({
+                icon: "error",
+                title: "Geçersiz Dosya!",
+                text: "Lütfen JPG, PNG veya WEBP formatında resim seç."
+            });
+
+            this.value = "";
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+
+            Swal.fire({
+                icon: "warning",
+                title: "Dosya Çok Büyük!",
+                text: "Maksimum resim boyutu 20 MB olmalıdır."
+            });
+
+            this.value = "";
+            return;
+        }
+
+        preview.src = URL.createObjectURL(file);
+
+        preview.classList.remove("d-none");
+
+        if (placeholder) {
+            placeholder.classList.add("d-none");
+        }
+
+    });
+
+
+    // Sıfırlama
+    form.addEventListener("reset", function () {
+
+        setTimeout(function () {
+
+            imageInput.value = "";
+
+            if (hasOriginalImage) {
+
+                preview.src = originalImage;
+                preview.classList.remove("d-none");
+
+            } else {
+
+                preview.src = "";
+                preview.classList.add("d-none");
+
+            }
+
+            if (placeholder) {
+
+                placeholder.classList.toggle(
+                    "d-none",
+                    hasOriginalImage
+                );
+
+            }
+
+        }, 0);
+
+    });
+
+
+    // Başarılı işlem bildirimi
+    @if (TempData["Success"] != null)
+        {
+            <text>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Başarıyla Kaydedildi!',
+                    text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Success"])),
+                    confirmButtonText: 'Tamam',
+                    confirmButtonColor: '#a58d78'
+                });
+        </text>
+    }
+
+
+        // Hata bildirimi
+        @if (TempData["Error"] != null)
+        {
+            <text>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'İşlem Başarısız!',
+                    text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Error"])),
+                    confirmButtonText: 'Tamam',
+                    confirmButtonColor: '#a58d78'
+                });
+        </text>
+    }
+
+</script>

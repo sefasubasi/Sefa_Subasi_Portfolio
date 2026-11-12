@@ -4,11 +4,11 @@
             <!-- Left Column -->
             <div class="col-lg-7 reveal-on-scroll is-revealed">
                 <div class="eyebrow-badge">
-                    <i class="bi bi-hand-wave-fill"></i> MERHABA, BEN SEFA
+                    <i class="bi bi-hand-wave-fill"></i> @ViewBag.Head
                 </div>
 
                 <h1 class="hero-title">
-                    Fikirleri Dijital Deneyimlere Dönüştürüyorum.
+                    @ViewBag.Subtitle
                 </h1>
 
                 <div class="typewriter-wrapper">
@@ -16,7 +16,7 @@
                 </div>
 
                 <p class="hero-lead">
-                    Modern yazılım teknolojileriyle yenilikçi çözümler geliştiriyor, bilgi ve deneyimlerimi paylaşarak teknoloji dünyasına değer katıyorum.
+                    @ViewBag.Detail
                 </p>
 
                 <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
@@ -46,7 +46,15 @@
             <div class="col-lg-5 reveal-on-scroll is-revealed">
                 <div class="position-relative mx-auto" style="max-width: 440px;">
                     <div class="hero-portrait-frame">
-                        <img src="~/Images/Resim.jpg"alt="Sefa Subaşı - .Net Geliştirici" class="hero-portrait-img">
+                        <img src="@ViewBag.FeatureImgUrl"
+                             alt="@ViewBag.Name - @ViewBag.Title"
+                             class="hero-portrait-img">
+                    </div>
+
+                    <div class="hero-profile-info">
+                        <h5>@ViewBag.Name</h5>
+                        <span class="hero-profile-divider"></span>
+                        <p>@ViewBag.Title</p>
                     </div>
                 </div>
             </div>
@@ -63,3 +71,33 @@
         </div>
     </div>
 </section>
+<style>
+    .hero-profile-info {
+        text-align: center;
+        margin-top: 18px;
+    }
+
+        .hero-profile-info h5 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #292D2B;
+            margin-bottom: 9px;
+        }
+
+    .hero-profile-divider {
+        display: block;
+        width: 38px;
+        height: 2px;
+        background: #91AA9D;
+        margin: 0 auto 9px;
+        border-radius: 2px;
+    }
+
+    .hero-profile-info p {
+        font-size: 14px;
+        font-weight: 500;
+        color: #829D90;
+        margin: 0;
+        letter-spacing: .3px;
+    }
+</style>

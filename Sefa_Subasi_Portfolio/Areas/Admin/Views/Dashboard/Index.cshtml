@@ -1,0 +1,578 @@
+﻿@model List<Sefa_Subasi_Portfolio.DAL.Entities.Message>
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+
+    int total = ViewBag.MessageCount ?? 0;
+    int unread = ViewBag.MessageRead ?? 0;
+    int read = ViewBag.MessageUnRead ?? 0;
+
+    int projectCount = ViewBag.ProjectCount ?? 0;
+    int experienceCount = ViewBag.ExperienceCount ?? 0;
+
+    int rate = total == 0 ? 0 : read * 100 / total;
+
+    int maxCount = Math.Max(projectCount, experienceCount);
+    int projectRate = maxCount == 0 ? 0 : projectCount * 100 / maxCount;
+    int experienceRate = maxCount == 0 ? 0 : experienceCount * 100 / maxCount;
+}
+
+<style>
+    .db {
+        --g: #2f5d4e;
+        --g-soft: #e7efe9;
+        --line: #ebe8e1;
+        --muted: #8a8a85;
+        --blue: #7899bf;
+        --red: #d96b6b;
+        color: #242424;
+    }
+
+    .db-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 22px;
+        height: 100%;
+    }
+
+    /* İstatistik kartları */
+    .db-stat {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-height: 92px;
+    }
+
+    .db-stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+        flex-shrink: 0;
+    }
+
+        .db-stat-icon.green {
+            background: var(--g-soft);
+            color: var(--g);
+        }
+
+        .db-stat-icon.red {
+            background: #fae8e8;
+            color: var(--red);
+        }
+
+        .db-stat-icon.blue {
+            background: #e8eff8;
+            color: #4779b5;
+        }
+
+    .db-stat-number {
+        font-size: 27px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .db-stat-label {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 3px;
+    }
+
+    .db-card-title {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    /* Donut grafik */
+    .donut-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 0 2px;
+    }
+
+    .donut {
+        width: 136px;
+        height: 136px;
+        min-width: 136px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+        .donut::before {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+    .donut-value {
+        position: relative;
+        z-index: 1;
+        font-size: 25px;
+        font-weight: 700;
+        color: #171717;
+    }
+
+    .donut-legend {
+        display: flex;
+        gap: 18px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 18px;
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .legend-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 3px;
+    }
+
+    /* Proje ve deneyim dağılımı */
+    .distribution-card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .distribution-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 24px;
+    }
+
+    .distribution-subtitle {
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .distribution-item {
+        margin-bottom: 25px;
+    }
+
+    .distribution-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 13px;
+    }
+
+    .distribution-label {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: var(--muted);
+    }
+
+        .distribution-label i {
+            color: var(--blue);
+        }
+
+    .distribution-count {
+        font-size: 15px;
+        font-weight: 700;
+        color: #222;
+    }
+
+    .distribution-bar {
+        height: 10px;
+        background: #f0f1ef;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .distribution-fill {
+        height: 100%;
+        border-radius: 20px;
+        transition: width .4s ease;
+    }
+
+    .project-fill {
+        background: var(--g);
+    }
+
+    .experience-fill {
+        background: var(--blue);
+    }
+
+    .distribution-footer {
+        margin-top: auto;
+        padding-top: 5px;
+        font-size: 11px;
+        color: #aaa;
+    }
+
+    /* Son mesajlar */
+    .recent-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+        .recent-header a {
+            color: var(--g);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+    .message-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+    }
+
+        .message-row:last-child {
+            border-bottom: none;
+        }
+
+    .message-avatar {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        border-radius: 50%;
+        background: var(--g-soft);
+        color: var(--g);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .message-content {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .message-email {
+        font-size: 13px;
+        font-weight: 600;
+        color: #222;
+        margin-bottom: 3px;
+    }
+
+    .message-detail {
+        font-size: 12px;
+        color: var(--muted);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .message-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+    }
+
+    .message-date {
+        font-size: 11px;
+        color: var(--muted);
+    }
+
+    .message-status {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+        .message-status.read {
+            background: #e8eff8;
+            color: #4779b5;
+        }
+
+        .message-status.unread {
+            background: #fae8e8;
+            color: var(--red);
+        }
+
+    .empty-message {
+        text-align: center;
+        color: var(--muted);
+        padding: 30px 10px;
+        font-size: 13px;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .db-card {
+            padding: 17px;
+        }
+
+        .message-row {
+            align-items: flex-start;
+        }
+
+        .message-meta {
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .message-date {
+            font-size: 10px;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+        }
+
+        .message-status {
+            padding: 4px 7px;
+        }
+    }
+</style>
+
+<div class="db container-fluid">
+
+    <!-- İSTATİSTİK KARTLARI -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-xl-4 col-md-6">
+            <div class="db-card db-stat">
+                <div class="db-stat-icon green">
+                    <i class="bi bi-envelope"></i>
+                </div>
+                <div>
+                    <div class="db-stat-number">@total</div>
+                    <div class="db-stat-label">Toplam Mesaj</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="db-card db-stat">
+                <div class="db-stat-icon red">
+                    <i class="bi bi-envelope-exclamation"></i>
+                </div>
+                <div>
+                    <div class="db-stat-number">@unread</div>
+                    <div class="db-stat-label">Okunmamış</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="db-card db-stat">
+                <div class="db-stat-icon blue">
+                    <i class="bi bi-envelope-check"></i>
+                </div>
+                <div>
+                    <div class="db-stat-number">@read</div>
+                    <div class="db-stat-label">Okunmuş</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- GRAFİKLER -->
+    <div class="row g-3 mb-4">
+
+        <!-- MESAJ OKUNMA ORANI -->
+        <div class="col-xl-4 col-md-6">
+            <div class="db-card">
+
+                <div class="db-card-title">
+                    Mesaj Okunma Oranı
+                </div>
+
+                <div class="donut-area">
+
+                    <div class="donut"
+                         style="background: conic-gradient(#2f5d4e 0% @rate%, #e7efe9 @rate% 100%);">
+
+                        <div class="donut-value">
+                            %@rate
+                        </div>
+
+                    </div>
+
+                    <div class="donut-legend">
+
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background:#2f5d4e"></span>
+                            Okundu (@read)
+                        </div>
+
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background:#e7efe9"></span>
+                            Okunmadı (@unread)
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- PROJE VE DENEYİM DAĞILIMI -->
+        <div class="col-xl-8 col-md-6">
+            <div class="db-card distribution-card">
+
+                <div class="distribution-header">
+                    <div class="db-card-title mb-0">
+                        Proje ve Deneyim Dağılımı
+                    </div>
+
+                    <span class="distribution-subtitle">
+                        Genel bakış
+                    </span>
+                </div>
+
+                <!-- Projeler -->
+                <div class="distribution-item">
+
+                    <div class="distribution-info">
+                        <div class="distribution-label">
+                            <i class="bi bi-code-slash"></i>
+                            Toplam Proje
+                        </div>
+
+                        <span class="distribution-count">
+                            @projectCount
+                        </span>
+                    </div>
+
+                    <div class="distribution-bar">
+                        <div class="distribution-fill project-fill"
+                             style="width:@(projectRate)%">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Deneyimler -->
+                <div class="distribution-item">
+
+                    <div class="distribution-info">
+                        <div class="distribution-label">
+                            <i class="bi bi-briefcase"></i>
+                            Toplam Deneyim
+                        </div>
+
+                        <span class="distribution-count">
+                            @experienceCount
+                        </span>
+                    </div>
+
+                    <div class="distribution-bar">
+                        <div class="distribution-fill experience-fill"
+                             style="width:@(experienceRate)%">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="distribution-footer">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Portföyünüzdeki mevcut kayıtların dağılımı.
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SON MESAJLAR -->
+    <div class="db-card">
+
+        <div class="recent-header">
+            <div class="db-card-title mb-0">
+                Son Mesajlar
+            </div>
+
+            <a href="/Admin/Message/Index">
+                Tümünü gör <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model.OrderByDescending(x => x.SendDate).Take(5))
+            {
+                <div class="message-row">
+
+                    <div class="message-avatar">
+                        @(string.IsNullOrWhiteSpace(item.SenderName)
+                            ? "?"
+                            : item.SenderName.Substring(0, 1).ToUpper())
+                    </div>
+
+                    <div class="message-content">
+                        <div class="message-email">
+                            @item.SenderName
+                        </div>
+
+                        <div class="message-detail">
+                            @item.MessageDetail
+                        </div>
+                    </div>
+
+                    <div class="message-meta">
+
+                        <span class="message-date">
+                            @item.SendDate.ToString("dd.MM.yyyy HH:mm")
+                        </span>
+
+                        @if (item.IsRead)
+                        {
+                            <span class="message-status read">
+                                Okundu
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="message-status unread">
+                                Yeni
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-message">
+                Henüz mesaj bulunmuyor.
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -7,7 +7,7 @@ namespace Sefa_Subasi_Portfolio.DAL.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Portfolio;integrated security=true;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=NewPortfolio;integrated security=true;Trusted_Connection=True;");
         }
 
         public DbSet<About> Abouts { get; set; }
@@ -18,5 +18,7 @@ namespace Sefa_Subasi_Portfolio.DAL.Context
         public DbSet<ProjectTechnology>ProjectTechnologies { get; set; }
         public DbSet<Education> Educations { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Message> Messages {  get; set; }
+        public DbSet<Feature> Features {  get; set; }
     }
 }

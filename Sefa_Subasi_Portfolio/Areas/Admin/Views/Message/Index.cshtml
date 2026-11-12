@@ -1,0 +1,526 @@
+﻿@model List<Sefa_Subasi_Portfolio.DAL.Entities.Message>
+
+@{
+    ViewData["Title"] = "Gelen Mesajlar";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="message-admin">
+
+    <!-- BAŞLIK -->
+    <div class="page-heading">
+        <div>
+            <h3>Gelen Mesajlar</h3>
+            <p>Ziyaretçilerden gelen mesajları buradan yönetebilirsin.</p>
+        </div>
+    </div>
+
+    <!-- BİLDİRİM -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["Success"]
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- İSTATİSTİKLER -->
+    <div class="stats-container">
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="bi bi-envelope"></i>
+            </div>
+            <div>
+                <span>Toplam Mesaj</span>
+                <h3>@Model.Count</h3>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon unread-icon">
+                <i class="bi bi-envelope-exclamation"></i>
+            </div>
+            <div>
+                <span>Okunmamış Mesaj</span>
+                <h3>@Model.Count(x => !x.IsRead)</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MESAJ TABLOSU -->
+    <div class="message-card">
+
+        <div class="card-heading">
+            <div>
+                <h5>Mesaj Kutusu</h5>
+                <small>Gelen tüm ziyaretçi mesajları</small>
+            </div>
+
+            <span class="count-badge">@Model.Count Mesaj</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table message-table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Gönderen</th>
+                        <th>E-posta</th>
+                        <th>Konu</th>
+                        <th>Tarih</th>
+                        <th>Durum</th>
+                        <th class="text-end">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="id-badge">
+                                        #@item.MessageId
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <strong>@item.SenderName</strong>
+                                </td>
+
+                                <td>@item.SenderEmail</td>
+
+                                <td>@item.Subject</td>
+
+                                <td>
+                                    @item.SendDate.ToString("dd.MM.yyyy HH:mm")
+                                </td>
+
+                                <td>
+                                    @if (item.IsRead)
+                                    {
+                                        <span class="status-badge read">
+                                            <i class="bi bi-check-circle"></i>
+                                            Okundu
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge unread">
+                                            <i class="bi bi-circle-fill"></i>
+                                            Yeni
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <div class="actions">
+
+                                        <button type="button"
+                                                class="action-btn view-btn"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#messageModal"
+                                                data-id="@item.MessageId"
+                                                data-name="@item.SenderName"
+                                                data-email="@item.SenderEmail"
+                                                data-subject="@item.Subject"
+                                                data-message="@item.MessageDetail"
+                                                data-date="@item.SendDate.ToString("dd.MM.yyyy HH:mm")"
+                                                onclick="showMessage(this)"
+                                                title="Mesajı Görüntüle">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+
+                                        <form asp-action="Delete"
+                                              method="post"
+                                              onsubmit="return confirm('Bu mesajı silmek istediğinize emin misiniz?')">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@item.MessageId" />
+
+                                            <button type="submit"
+                                                    class="action-btn delete-btn"
+                                                    title="Sil">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                <i class="bi bi-envelope-open"></i>
+                                <p>Henüz gelen mesaj bulunmuyor.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- MESAJ DETAY MODALI -->
+<div class="modal fade" id="messageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content message-modal">
+
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title">Mesaj Detayı</h5>
+                    <small>Gelen ziyaretçi mesajı</small>
+                </div>
+
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="detail-item">
+                    <label>Gönderen</label>
+                    <p id="detailName"></p>
+                </div>
+
+                <div class="detail-item">
+                    <label>E-posta</label>
+                    <p id="detailEmail"></p>
+                </div>
+
+                <div class="detail-item">
+                    <label>Konu</label>
+                    <p id="detailSubject"></p>
+                </div>
+
+                <div class="detail-item">
+                    <label>Gönderim Tarihi</label>
+                    <p id="detailDate"></p>
+                </div>
+
+                <div class="detail-item">
+                    <label>Mesaj</label>
+                    <div id="detailMessage" class="message-content"></div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-close-modal"
+                        data-bs-dismiss="modal">
+                    Kapat
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .message-admin {
+        padding: 26px;
+        color: #344b3e;
+    }
+
+    .page-heading {
+        margin-bottom: 22px;
+    }
+
+        .page-heading h3 {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .page-heading p {
+            color: #89958e;
+            margin: 0;
+        }
+
+    .stats-container {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+    }
+
+    .stat-card {
+        background: white;
+        border: 1px solid #e7ebe8;
+        border-radius: 13px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 230px;
+    }
+
+    .stat-icon {
+        width: 45px;
+        height: 45px;
+        background: #e7f0eb;
+        color: #355b48;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        font-size: 21px;
+    }
+
+    .unread-icon {
+        background: #fff3e5;
+        color: #c28b45;
+    }
+
+    .stat-card span {
+        color: #89958e;
+        font-size: 13px;
+    }
+
+    .stat-card h3 {
+        margin: 3px 0 0;
+        font-weight: 700;
+    }
+
+    .message-card {
+        background: white;
+        border: 1px solid #e7ebe8;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 3px 12px rgba(40,70,50,.04);
+    }
+
+    .card-heading {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #edf0ed;
+    }
+
+        .card-heading h5 {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .card-heading small {
+            color: #89958e;
+        }
+
+    .count-badge, .id-badge {
+        background: #edf3ef;
+        color: #426650;
+        padding: 7px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+    }
+
+    .message-table {
+        min-width: 850px;
+        margin: 0;
+    }
+
+        .message-table thead th {
+            background: #f8faf8;
+            color: #87948c;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 15px;
+            border: 0;
+            white-space: nowrap;
+        }
+
+        .message-table tbody td {
+            padding: 16px 15px;
+            font-size: 13px;
+            border-color: #f0f2f0;
+            color: #53645a;
+        }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 9px;
+        border-radius: 7px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+        .status-badge.read {
+            background: #edf3ef;
+            color: #426650;
+        }
+
+        .status-badge.unread {
+            background: #fff4e5;
+            color: #b47b31;
+        }
+
+            .status-badge.unread i {
+                font-size: 7px;
+            }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+        .actions form {
+            display: flex;
+        }
+
+    .action-btn {
+        width: 35px;
+        height: 35px;
+        border: 0;
+        border-radius: 9px;
+        cursor: pointer;
+    }
+
+    .view-btn {
+        background: #edf3ef;
+        color: #355b48;
+    }
+
+    .delete-btn {
+        background: #fff0ed;
+        color: #cb6557;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px !important;
+        color: #89958e !important;
+    }
+
+        .empty-state i {
+            font-size: 30px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+    .message-modal {
+        border: 0;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+        .message-modal .modal-header {
+            background: #f7faf8;
+            padding: 20px;
+        }
+
+        .message-modal .modal-title {
+            color: #355b48;
+            font-weight: 700;
+        }
+
+        .message-modal .modal-header small {
+            color: #89958e;
+        }
+
+        .message-modal .modal-body {
+            padding: 22px;
+        }
+
+    .detail-item {
+        margin-bottom: 17px;
+    }
+
+        .detail-item label {
+            font-size: 12px;
+            color: #89958e;
+            margin-bottom: 5px;
+        }
+
+        .detail-item p {
+            color: #344b3e;
+            font-weight: 600;
+            margin: 0;
+            overflow-wrap: anywhere;
+        }
+
+    .message-content {
+        background: #f7faf8;
+        padding: 14px;
+        border-radius: 9px;
+        color: #53645a;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    .btn-close-modal {
+        background: #edf3ef;
+        color: #355b48;
+        border: 0;
+        padding: 9px 18px;
+        border-radius: 9px;
+        font-weight: 600;
+    }
+
+    @@media(max-width: 768px) {
+        .message-admin {
+            padding: 16px;
+        }
+
+        .stat-card {
+            width: 100%;
+        }
+
+        .card-heading {
+            padding: 16px;
+        }
+    }
+</style>
+
+
+<script>
+    async function showMessage(button) {
+
+        document.getElementById("detailName").textContent = button.dataset.name;
+        document.getElementById("detailEmail").textContent = button.dataset.email;
+        document.getElementById("detailSubject").textContent = button.dataset.subject;
+        document.getElementById("detailMessage").textContent = button.dataset.message;
+        document.getElementById("detailDate").textContent = button.dataset.date;
+
+        const token = document.querySelector(
+            'input[name="__RequestVerificationToken"]'
+        ).value;
+
+        const response = await fetch('/Admin/Message/MarkAsRead', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'RequestVerificationToken': token
+            },
+            body: new URLSearchParams({
+                id: button.dataset.id
+            })
+        });
+
+        if (!response.ok) {
+            console.error("Mesaj okundu olarak işaretlenemedi:", response.status);
+        }
+
+        document.getElementById('messageModal').addEventListener('hidden.bs.modal', function () {
+            location.reload();
+        });
+    }
+</script>

@@ -1,0 +1,585 @@
+﻿@model List<Sefa_Subasi_Portfolio.DAL.Entities.Skill>
+
+@{
+    ViewData["Title"] = "Yeteneklerim";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+
+    int categoryCount = Model?.Count ?? 0;
+    int itemCount = Model?.Sum(x => x.SkillItems?.Count ?? 0) ?? 0;
+}
+
+<div class="container-fluid skill-page">
+
+    <!-- Başlık -->
+    <div class="mb-4">
+        <h2>Yetenek Yönetimi</h2>
+        <p>Kategorilerini ve teknolojilerini buradan yönetebilirsin.</p>
+    </div>
+
+    <!-- Bildirimler -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- İstatistikler -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <div class="card skill-stat">
+                <div class="card-body">
+                    <div class="stat-icon">
+                        <i class="bi bi-grid"></i>
+                    </div>
+                    <h3>@categoryCount</h3>
+                    <span>Toplam Kategori</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card skill-stat">
+                <div class="card-body">
+                    <div class="stat-icon">
+                        <i class="bi bi-code-slash"></i>
+                    </div>
+                    <h3>@itemCount</h3>
+                    <span>Toplam Yetenek</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card skill-stat">
+                <div class="card-body">
+                    <div class="stat-icon">
+                        <i class="bi bi-layers"></i>
+                    </div>
+                    <h3>
+                        @(Model?.Count(x => x.SkillItems != null && x.SkillItems.Any()) ?? 0)
+                    </h3>
+                    <span>Yetenek İçeren Kategori</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Kategori Ekle -->
+    <div class="card skill-card mb-4">
+        <div class="card-body">
+
+            <div class="section-heading mb-3">
+                <div>
+                    <h5>
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Yeni Kategori Ekle
+                    </h5>
+                    <small>Yeni bir yetenek grubu oluştur.</small>
+                </div>
+            </div>
+
+            <form asp-action="Create" method="post" class="row g-3">
+                @Html.AntiForgeryToken()
+
+                <div class="col-lg-4 col-md-6">
+                    <label class="form-label">Kategori Adı</label>
+                    <input name="Title"
+                           class="form-control"
+                           placeholder="Örn. Backend Development"
+                           required />
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <label class="form-label">Açıklama</label>
+                    <input name="Description"
+                           class="form-control"
+                           placeholder="Kategori açıklaması"
+                           required />
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <label class="form-label">İkon</label>
+                    <input name="Icon"
+                           class="form-control"
+                           placeholder="bi bi-code-slash"
+                           required />
+                </div>
+
+                <div class="col-lg-2 col-md-6 d-flex align-items-end">
+                    <button type="submit" class="btn btn-add w-100">
+                        <i class="bi bi-plus-lg me-1"></i>
+                        Kategori Ekle
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Kategori Listesi -->
+    <div class="mb-3">
+        <h5 class="mb-1">Yetenek Kategorileri</h5>
+        <small class="text-muted">Mevcut kategorilerini yönet.</small>
+    </div>
+
+    <div class="row g-3">
+
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var skill in Model)
+            {
+                <div class="col-xl-6 col-12">
+
+                    <div class="card skill-card h-100">
+                        <div class="card-body">
+
+                            <!-- Kategori Başlığı -->
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+
+                                <div class="d-flex gap-3 align-items-center">
+
+                                    <div class="category-icon">
+                                        <i class="@skill.Icon"></i>
+                                    </div>
+
+                                    <div>
+                                        <h5 class="mb-1">@skill.Title</h5>
+                                        <small class="text-muted">
+                                            @(skill.Description ?? "Açıklama bulunmuyor.")
+                                        </small>
+                                    </div>
+
+                                </div>
+
+                                <form asp-action="Delete"
+                                      method="post"
+                                      onsubmit="return confirm('Bu kategoriyi ve içerisindeki tüm yetenekleri silmek istediğinize emin misiniz?')">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@skill.SkillId" />
+
+                                    <button type="submit"
+                                            class="btn btn-delete"
+                                            title="Kategoriyi Sil">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                            <hr />
+
+                            <!-- Yetenekler -->
+                            <div class="skill-items mb-3">
+
+                                @if (skill.SkillItems != null && skill.SkillItems.Any())
+                                {
+                                    @foreach (var item in skill.SkillItems)
+                                    {
+                                        <div class="skill-level-item">
+
+                                            <!-- Yetenek adı ve seviyesi -->
+                                            <div class="skill-level-header">
+
+                                                <span class="skill-name">
+                                                    @item.Name
+                                                </span>
+
+                                                <strong>%@item.Level</strong>
+
+                                            </div>
+
+                                            <!-- İlerleme çubuğu -->
+                                            <div class="skill-level-bar">
+                                                <div class="skill-level-progress"
+                                                     style="width: @(item.Level)%">
+                                                </div>
+                                            </div>
+
+                                            <!-- Güncelleme ve silme -->
+                                            <div class="skill-actions">
+
+                                                <form asp-action="UpdateItem"
+                                                      method="post"
+                                                      class="skill-update-form">
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           value="@item.SkillItemId" />
+
+                                                    <input type="number"
+                                                           name="Level"
+                                                           value="@item.Level"
+                                                           min="0"
+                                                           max="100"
+                                                           class="form-control level-input"
+                                                           required />
+
+                                                    <span class="percent-sign">%</span>
+
+                                                    <button type="submit"
+                                                            class="btn btn-update">
+                                                        <i class="bi bi-check-lg"></i>
+                                                        Güncelle
+                                                    </button>
+
+                                                </form>
+
+                                                <form asp-action="DeleteItem"
+                                                      method="post"
+                                                      onsubmit="return confirm('Bu yeteneği silmek istiyor musunuz?')">
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           value="@item.SkillItemId" />
+
+                                                    <button type="submit"
+                                                            class="btn btn-delete"
+                                                            title="Yeteneği Sil">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <small class="text-muted">
+                                        Henüz bu kategoriye yetenek eklenmemiş.
+                                    </small>
+                                }
+
+                            </div>
+
+                            <hr />
+
+                            <!-- Yeni Yetenek Ekle -->
+                            <form asp-action="AddItem"
+                                  method="post"
+                                  class="add-skill-form">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="skillId"
+                                       value="@skill.SkillId" />
+
+                                <input name="Name"
+                                       class="form-control"
+                                       placeholder="Yeni yetenek adı..."
+                                       required />
+
+                                <input type="number"
+                                       name="Level"
+                                       class="form-control add-level-input"
+                                       placeholder="Seviye %"
+                                       min="0"
+                                       max="100"
+                                       value="50"
+                                       required />
+
+                                <button type="submit" class="btn btn-add">
+                                    <i class="bi bi-plus-lg"></i>
+                                    <span class="d-none d-sm-inline">Ekle</span>
+                                </button>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <h5>Henüz yetenek kategorisi yok</h5>
+                    <p>
+                        Yukarıdaki formu kullanarak ilk kategorini oluşturabilirsin.
+                    </p>
+                </div>
+            </div>
+        }
+
+    </div>
+
+</div>
+
+<style>
+    .skill-page {
+        padding: 25px;
+        color: #34443e;
+    }
+
+        .skill-page h2 {
+            font-weight: 650;
+        }
+
+        .skill-page p {
+            color: #89938e;
+            margin-bottom: 0;
+        }
+
+    .skill-stat,
+    .skill-card {
+        border: 1px solid #e9eeeb;
+        border-radius: 14px;
+        box-shadow: 0 3px 15px #263d3508;
+    }
+
+        .skill-stat .card-body {
+            padding: 20px;
+            position: relative;
+        }
+
+        .skill-stat h3 {
+            font-size: 27px;
+            font-weight: 700;
+            margin: 12px 0 2px;
+        }
+
+        .skill-stat span {
+            color: #89938e;
+            font-size: 13px;
+        }
+
+    .stat-icon,
+    .category-icon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        background: #edf4ef;
+        color: #527963;
+        font-size: 19px;
+        flex-shrink: 0;
+    }
+
+    .skill-card .card-body {
+        padding: 22px;
+    }
+
+    .skill-card h5 {
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .section-heading small {
+        color: #89938e;
+    }
+
+    .form-label {
+        font-size: 13px;
+        font-weight: 500;
+        color: #52635a;
+    }
+
+    .form-control {
+        border-radius: 9px;
+        padding: 10px 12px;
+        border-color: #e4eae6;
+    }
+
+        .form-control:focus {
+            border-color: #9bb9a8;
+            box-shadow: 0 0 0 3px #9bb9a822;
+        }
+
+    .btn-add {
+        background: #e7f0eb;
+        color: #355b48;
+        border-radius: 9px;
+        padding: 10px 14px;
+        white-space: nowrap;
+    }
+
+        .btn-add:hover {
+            background: #d5e6dc;
+            color: #294b39;
+        }
+
+    .btn-delete {
+        background: #fff0ef;
+        color: #bd5555;
+        border-radius: 8px;
+        border: none;
+    }
+
+        .btn-delete:hover {
+            background: #fce0df;
+            color: #a63d3d;
+        }
+
+    /* Yetenek seviyesi */
+    .skill-level-item {
+        padding: 13px 0;
+        border-bottom: 1px solid #edf0ed;
+    }
+
+        .skill-level-item:last-child {
+            border-bottom: none;
+        }
+
+    .skill-level-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+    .skill-name {
+        color: #426451;
+        font-weight: 600;
+    }
+
+    .skill-level-header strong {
+        color: #2f5d4e;
+        font-size: 13px;
+    }
+
+    .skill-level-bar {
+        height: 7px;
+        background: #edf1ed;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .skill-level-progress {
+        height: 100%;
+        background: #2f5d4e;
+        border-radius: 20px;
+        transition: width .3s ease;
+    }
+
+    .skill-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-top: 9px;
+    }
+
+    .skill-update-form {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .level-input {
+        width: 75px;
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+
+    .percent-sign {
+        font-size: 12px;
+        color: #89938e;
+    }
+
+    .btn-update {
+        background: #edf4ef;
+        color: #355b48;
+        border-radius: 7px;
+        font-size: 12px;
+        padding: 6px 9px;
+    }
+
+        .btn-update:hover {
+            background: #d5e6dc;
+            color: #294b39;
+        }
+
+    /* Yeni yetenek formu */
+    .add-skill-form {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .add-skill-form input[name="Name"] {
+            flex: 1;
+            min-width: 0;
+        }
+
+    .add-level-input {
+        width: 105px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 55px 15px;
+        background: #fff;
+        border: 1px dashed #dce5df;
+        border-radius: 14px;
+    }
+
+        .empty-state i {
+            font-size: 35px;
+            color: #9bb9a8;
+        }
+
+        .empty-state h5 {
+            margin-top: 15px;
+        }
+
+        .empty-state p {
+            color: #89938e;
+        }
+
+    @@media (max-width: 576px) {
+        .skill-page {
+            padding: 12px;
+        }
+
+        .skill-card .card-body {
+            padding: 16px;
+        }
+
+        .skill-stat .card-body {
+            padding: 15px;
+        }
+
+        .add-skill-form {
+            flex-wrap: wrap;
+        }
+
+            .add-skill-form input[name="Name"] {
+                flex-basis: 100%;
+            }
+
+        .add-level-input {
+            flex: 1;
+            width: auto;
+        }
+    }
+</style>

@@ -1,0 +1,457 @@
+﻿@model About
+
+@{
+    ViewData["Title"] = "Hakkımda";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="about-page">
+
+    <!-- Sayfa Başlığı -->
+    <div class="about-heading">
+        <div>
+            <h3>Hakkımda</h3>
+            <p>Kişisel bilgilerini ve profil fotoğrafını buradan güncelleyebilirsin.</p>
+        </div>
+
+    </div>
+
+    <!-- Güncelleme Formu -->
+    <div class="about-card">
+
+        <div class="about-card-header">
+            <div class="header-icon">
+                <i class="bi bi-pencil-square"></i>
+            </div>
+            <div>
+                <h5>Profil Bilgileri</h5>
+                <small>Portfolyoda görüntülenecek hakkımda bilgileri</small>
+            </div>
+        </div>
+
+        <form id="updateForm"
+              method="post"
+              enctype="multipart/form-data"
+              asp-area="Admin"
+              asp-controller="About"
+              asp-action="Index">
+
+            <input type="hidden" asp-for="AboutId" />
+
+            <div class="about-card-body">
+
+                <div class="row g-4">
+
+                    <!-- Başlık -->
+                    <div class="col-md-6">
+                        <label asp-for="Title" class="form-label">
+                            Başlık
+                        </label>
+
+                        <input asp-for="Title"
+                               class="form-control"
+                               placeholder="Örn: Hakkımda" />
+                    </div>
+
+                    <!-- Alt Başlık -->
+                    <div class="col-md-6">
+                        <label asp-for="SubDescription" class="form-label">
+                            Alt Başlık
+                        </label>
+
+                        <input asp-for="SubDescription"
+                               class="form-control"
+                               placeholder="Kendinizi kısaca tanıtın" />
+                    </div>
+
+                    <!-- Detaylar -->
+                    <div class="col-12">
+                        <label asp-for="Details" class="form-label">
+                            Hakkımda Detayları
+                        </label>
+
+                        <textarea asp-for="Details"
+                                  class="form-control details-input"
+                                  rows="6"
+                                  placeholder="Kendinizden bahsedin..."></textarea>
+
+                        <div class="field-hint">
+                            <i class="bi bi-info-circle"></i>
+                            Ziyaretçilerin göreceği kişisel açıklamanı buraya yazabilirsin.
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Profil Fotoğrafı -->
+                <div class="photo-section">
+
+                    <div class="photo-info">
+                        <h6>
+                            <i class="bi bi-image me-2"></i>
+                            Profil Fotoğrafı
+                        </h6>
+                        <p>Portfolyoda kullanılacak profil görselini seçebilirsin.</p>
+                    </div>
+
+                    <div class="photo-content">
+
+                        <div class="photo-preview">
+                            @if (!string.IsNullOrEmpty(Model.AboutImgUrl))
+                            {
+                                <img id="imagePreview"
+                                     src="@Model.AboutImgUrl"
+                                     alt="Profil fotoğrafı" />
+                            }
+                            else
+                            {
+                                <div id="emptyPreview">
+                                    <i class="bi bi-person"></i>
+                                </div>
+
+                                <img id="imagePreview"
+                                     src=""
+                                     alt="Profil fotoğrafı"
+                                     style="display:none;" />
+                            }
+                        </div>
+
+                        <div class="photo-upload">
+                            <label class="form-label">Yeni Fotoğraf Seç</label>
+
+                            <input type="file"
+                                   name="imageFile"
+                                   id="imageFile"
+                                   class="form-control"
+                                   accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" />
+
+                            <small>
+                                JPG, PNG veya WEBP formatı kullanabilirsin.
+                            </small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Form Alt Alanı -->
+            <div class="about-card-footer">
+                <button type="submit" class="save-button">
+                    <i class="bi bi-check2-circle"></i>
+                    Değişiklikleri Kaydet
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <style>
+        .about-page {
+            padding: 26px;
+            color: #344b3e;
+        }
+
+        .about-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+            .about-heading h3 {
+                font-size: 23px;
+                font-weight: 700;
+                margin-bottom: 6px;
+                color: #344b3e;
+            }
+
+            .about-heading p {
+                color: #89958e;
+                font-size: 13px;
+                margin: 0;
+            }
+
+        .heading-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: #e7efe9;
+            color: #2f5d4e;
+            font-size: 22px;
+        }
+
+        .about-card {
+            background: #fff;
+            border: 1px solid #ebe8e1;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(40, 70, 50, .04);
+        }
+
+        .about-card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 24px;
+            border-bottom: 1px solid #ebe8e1;
+        }
+
+        .header-icon {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            background: #e7efe9;
+            color: #2f5d4e;
+            border-radius: 11px;
+            font-size: 19px;
+        }
+
+        .about-card-header h5 {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0 0 4px;
+            color: #344b3e;
+        }
+
+        .about-card-header small {
+            font-size: 12px;
+            color: #89958e;
+        }
+
+        .about-card-body {
+            padding: 25px;
+        }
+
+        .about-page .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #455b4c;
+            margin-bottom: 8px;
+        }
+
+        .about-page .form-control {
+            border: 1px solid #e3e9e4;
+            border-radius: 9px;
+            padding: 11px 13px;
+            font-size: 13px;
+            color: #344b3e;
+            background-color: #fff;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+            .about-page .form-control:focus {
+                border-color: #6d9b80;
+                box-shadow: 0 0 0 3px rgba(47, 93, 78, .09);
+            }
+
+        .details-input {
+            resize: vertical;
+            min-height: 145px;
+            line-height: 1.7;
+        }
+
+        .field-hint {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #89958e;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: #ebe8e1;
+            margin: 28px 0;
+        }
+
+        .photo-info h6 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #344b3e;
+            margin-bottom: 5px;
+        }
+
+            .photo-info h6 i {
+                color: #2f5d4e;
+            }
+
+        .photo-info p {
+            font-size: 12px;
+            color: #89958e;
+            margin-bottom: 18px;
+        }
+
+        .photo-content {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .photo-preview {
+            width: 125px;
+            height: 125px;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #e7efe9;
+            border: 1px solid #ebe8e1;
+            flex-shrink: 0;
+        }
+
+            .photo-preview img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .photo-preview #emptyPreview {
+                width: 100%;
+                height: 100%;
+                display: grid;
+                place-items: center;
+                font-size: 42px;
+                color: #2f5d4e;
+            }
+
+        .photo-upload {
+            flex: 1;
+            min-width: 220px;
+        }
+
+            .photo-upload small {
+                display: block;
+                color: #89958e;
+                font-size: 11px;
+                margin-top: 8px;
+            }
+
+        .about-card-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 18px 25px;
+            border-top: 1px solid #ebe8e1;
+            background: #fcfdfc;
+        }
+
+        .save-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 20px;
+            background: #2f5d4e;
+            color: #fff;
+            border: none;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background .2s, transform .2s;
+        }
+
+            .save-button:hover {
+                background: #244a3d;
+                transform: translateY(-1px);
+            }
+
+        @@media (max-width: 768px) {
+            .about-page {
+                padding: 15px;
+            }
+
+            .about-card-header,
+            .about-card-body {
+                padding: 18px;
+            }
+
+            .about-card-footer {
+                padding: 15px 18px;
+            }
+
+            .photo-content {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .photo-upload {
+                width: 100%;
+            }
+
+            .save-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</div>
+
+<script>
+    // Fotoğraf önizleme
+    document.getElementById("imageFile").addEventListener("change", function (e) {
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        const preview = document.getElementById("imagePreview");
+        const emptyPreview = document.getElementById("emptyPreview");
+
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+
+        if (emptyPreview) {
+            emptyPreview.style.display = "none";
+        }
+    });
+
+    // Güncelleme onayı
+    const form = document.getElementById("updateForm");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: "Emin misiniz?",
+            text: "Hakkımda bilgileriniz güncellenecek.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#2f5d4e",
+            cancelButtonColor: "#999",
+            confirmButtonText: "Evet, güncelle",
+            cancelButtonText: "Vazgeç"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+
+    @if (TempData["NullArea"] != null)
+        {
+            <text>
+                Swal.fire({
+                    title: "Uyarı!",
+                    text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["NullArea"])),
+                    icon: "warning",
+                    confirmButtonText: "Tamam"
+                });
+        </text>
+    }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                Swal.fire({
+                    title: "Başarılı!",
+                    text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["SuccessMessage"])),
+                    icon: "success",
+                    confirmButtonText: "Tamam"
+                });
+        </text>
+    }
+</script>

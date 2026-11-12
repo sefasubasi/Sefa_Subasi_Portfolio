@@ -1,41 +1,187 @@
-﻿@model List<Sefa_Subasi_Portfolio.DAL.Entities.Skill>
+﻿
+@model List<Sefa_Subasi_Portfolio.DAL.Entities.Skill>
 
 <section id="skills">
     <div class="container">
-        <div class="section-header text-center mx-auto reveal-on-scroll" style="max-width: 680px;">
+
+        <!-- Section Header -->
+        <div class="section-header text-center mx-auto reveal-on-scroll"
+             style="max-width: 680px;">
+
             <div class="eyebrow-badge">
-                <i class="bi bi-stack"></i> TEKNOLOJİ YIĞINIM
+                <i class="bi bi-stack"></i>
+                TEKNOLOJİ YIĞINIM
             </div>
+
             <h2 class="section-title">
                 Kullandığım Teknolojiler ve Uzmanlık Alanlarım
             </h2>
+
             <p class="section-description mx-auto">
-                Bir fikrin hayata geçirilmesinden ölçeklenebilir bir yazılım ürününe dönüşmesine kadar farklı teknolojilerle çalışıyorum.
+                Bir fikrin hayata geçirilmesinden ölçeklenebilir bir yazılım
+                ürününe dönüşmesine kadar farklı teknolojilerle çalışıyorum.
             </p>
+
         </div>
 
+        <!-- Skill Categories -->
         <div class="row g-4">
-            @foreach (var item in Model)
+
+            @if (Model != null && Model.Any())
             {
-                <!-- Category Card -->
-                <div class="col-md-6 col-lg-4 reveal-on-scroll">
-                    <div class="skill-card">
-                        <div class="skill-icon-box">
-                            <!-- Dinamik İkon (Örn: bi bi-server) -->
-                            <i class="@item.Icon"></i>
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-6 col-lg-4 reveal-on-scroll">
+
+                        <div class="skill-card">
+
+                            <!-- Category Icon -->
+                            <div class="skill-icon-box">
+                                <i class="@item.Icon"></i>
+                            </div>
+
+                            <!-- Category Title -->
+                            <h3 class="h5 fw-bold mb-2">
+                                @item.Title
+                            </h3>
+
+                            <!-- Category Description -->
+                            <p class="text-muted small mb-4">
+                                @item.Description
+                            </p>
+
+                            <!-- Skill Items -->
+                            <div class="skill-list">
+
+                                @if (item.SkillItems != null && item.SkillItems.Any())
+                                {
+                                    @foreach (var subItem in item.SkillItems)
+                                    {
+                                        <div class="skill-item">
+
+                                            <div class="skill-item-header">
+                                                <span class="skill-name">
+                                                    @subItem.Name
+                                                </span>
+
+                                                <span class="skill-level">
+                                                    %@subItem.Level
+                                                </span>
+                                            </div>
+
+                                            <div class="skill-progress">
+                                                <div class="skill-progress-bar"
+                                                     role="progressbar"
+                                                     style="width: @(Math.Clamp(subItem.Level, 0, 100))%"
+                                                     aria-valuenow="@subItem.Level"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">
+                                        Henüz yetenek eklenmemiş.
+                                    </span>
+                                }
+
+                            </div>
+
                         </div>
-                        <h3 class="h5 fw-bold mb-3">@item.Title</h3>
-                        <p class="text-muted small mb-4">@item.Description</p>
-                        <div class="d-flex flex-wrap">
-                            @foreach (var subItem in item.SkillItems)
-                            {
-                                <span class="tech-badge">@subItem.Name</span>
-                            }
-                        </div>
+
                     </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center">
+                    <p class="text-muted">
+                        Henüz yetenek bilgisi bulunmuyor.
+                    </p>
                 </div>
             }
+
         </div>
     </div>
 </section>
-</section>
+<style>
+
+    /* Skill List */
+    .skill-list {
+        display: flex;
+        flex-direction: column;
+        gap: 17px;
+        margin-top: 10px;
+    }
+
+    .skill-item {
+        width: 100%;
+    }
+
+    .skill-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .skill-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: #34443e;
+    }
+
+    .skill-level {
+        font-size: 12px;
+        font-weight: 700;
+        color: #2f5d4e;
+        white-space: nowrap;
+    }
+
+    .skill-progress {
+        width: 100%;
+        height: 7px;
+        background: #edf1ed;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .skill-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #2f5d4e, #719b83);
+        border-radius: 20px;
+        transition: width 0.8s ease;
+    }
+
+    /* Kart düzeni */
+    .skill-card {
+        height: 100%;
+        padding: 28px;
+        border-radius: 16px;
+        background: #fff;
+        border: 1px solid #e9eeeb;
+        transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(47, 93, 78, .08);
+        }
+
+    /* Responsive */
+    @@media (max-width: 576px) {
+        .skill-card {
+            padding: 22px;
+        }
+
+        .skill-list {
+            gap: 15px;
+        }
+    }
+
+</style>

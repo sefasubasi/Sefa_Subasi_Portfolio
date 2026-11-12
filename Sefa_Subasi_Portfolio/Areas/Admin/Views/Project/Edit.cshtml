@@ -1,0 +1,111 @@
+﻿@model Sefa_Subasi_Portfolio.DAL.Entities.Project
+
+@{
+    ViewData["Title"] = "Project Update";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+
+<style>
+    .project-page { padding: 28px; color: #394b43; }
+    .form-heading { margin-bottom: 25px; }
+    .form-heading h3 { font-size: 23px; font-weight: 700; }
+    .form-heading p { color: #98a69e; font-size: 13px; }
+
+    .form-card {
+        background: white;
+        border: 1px solid #eeeee9;
+        border-radius: 14px;
+        max-width: 800px;
+        padding: 28px;
+    }
+
+    .form-card label {
+        font-size: 12px;
+        font-weight: 650;
+        margin-bottom: 8px;
+        color: #526359;
+    }
+
+    .form-card .form-control {
+        border: 1px solid #e9ece8;
+        background: #fcfdfb;
+        border-radius: 8px;
+        padding: 11px 13px;
+        font-size: 13px;
+        margin-bottom: 19px;
+        box-shadow: none;
+    }
+
+    .form-card .form-control:focus {
+        border-color: #8ba995;
+        background: white;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        border-top: 1px solid #f0f1ed;
+        padding-top: 20px;
+    }
+
+    .btn-save, .btn-cancel {
+        padding: 10px 17px;
+        border-radius: 8px;
+        font-size: 13px;
+        text-decoration: none;
+        border: none;
+    }
+
+    .btn-save { background: #628b73; color: white; }
+    .btn-cancel { background: #f1f3f0; color: #68776e; }
+
+    @@media(max-width: 768px) {
+        .project-page { padding: 15px; }
+        .form-card { padding: 18px; }
+    }
+</style>
+
+<div class="project-page">
+
+    <div class="form-heading">
+        <h3>Projeyi Güncelle</h3>
+        <p>Proje bilgilerini düzenleyebilirsin.</p>
+    </div>
+
+    <div class="form-card">
+
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="ProjectId" />
+
+            <label>Proje Başlığı</label>
+            <input asp-for="Head" class="form-control" />
+
+            <label>Proje Kategorisi</label>
+            <input asp-for="ProjectCategory" class="form-control" />
+
+            <label>Proje Açıklaması</label>
+            <textarea asp-for="Detail" class="form-control"
+                      rows="5"></textarea>
+
+            <label>Web Sitesi / GitHub</label>
+            <input asp-for="WebSite" class="form-control" />
+
+            <label>Kullanılan Teknolojiler</label>
+            <input name="technologies"
+                   value="@ViewBag.Technologies"
+                   class="form-control" />
+
+            <div class="form-actions">
+                <a asp-action="Index" class="btn-cancel">Vazgeç</a>
+                <button type="submit" class="btn-save">
+                    <i class="bi bi-check-lg me-1"></i> Değişiklikleri Kaydet
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
