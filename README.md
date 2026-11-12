@@ -18,13 +18,13 @@ Uygulama; kişisel bilgilerin, yeteneklerin, profesyonel deneyimlerin, projeleri
 
 #### Ana Sayfa
 
-![Ana Sayfa](docs/images/home-page.png)
+![Ana Sayfa](docs/Images/home-page.png)
 
 #### Hakkımda ve Yetenekler
 
 <p align="center">
   <img src="wwwroot/images/about-section.png" width="49%" alt="Hakkımda bölümü" />
-  <img src="docs/images/skills-section.png" width="49%" alt="Yetenekler bölümü" />
+  <img src="wwwroot/docs/images/skills-section.png" width="49%" alt="Yetenekler bölümü" />
 </p>
 
 #### Deneyimler ve Projeler
